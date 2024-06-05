@@ -1,0 +1,42 @@
+// used for react webpage development with vite
+{
+    "compilerOptions":{
+        // -- ts compiler settings
+        "strict":true,
+        "jsx":"react-jsx",
+        "noEmit":true,
+        // "importHelpers":true,
+
+        // -- lib settings
+        "lib":["dom","ESNext"],
+        "target":"ESNext",
+        "types": ["vite/client"],
+
+        // -- module/import settings
+        "esModuleInterop":false,
+        "moduleResolution":"node",
+        "module":"ESNext",
+        "resolveJsonModule":true,
+        "isolatedModules":true,
+        "allowSyntheticDefaultImports": true,
+        // "skipLibCheck":true,
+
+        // -- pathing
+        "baseUrl":".",
+        "paths":{
+            "@/*":["web/*"]
+        }
+    },
+
+    "include":[
+        "web/**/*.d.ts",
+        "web/**/*.ts",
+        "web/**/*.tsx",
+        "stories/**/*.ts",
+        "stories/**/*.tsx"
+    ],
+
+    "exclude":[
+        "node_modules"
+    ]
+}
