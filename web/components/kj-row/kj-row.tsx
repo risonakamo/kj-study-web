@@ -1,7 +1,7 @@
 import _ from "lodash";
 import {ForwardIcon} from "lucide-react";
 
-import {splitSentenceOnWord} from "@/lib/sentence-lib";
+import {splitSentenceOnWord} from "@/lib/sentence";
 
 import "./kj-row.styl";
 

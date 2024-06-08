@@ -1,6 +1,6 @@
 import {test,expect,assert} from "vitest";
 
-import {splitSentenceOnWord} from "@/lib/sentence-lib";
+import {splitSentenceOnWord} from "@/lib/sentence";
 
 test("split-sentence",()=>{
     const sentence:string="彼は茶碗を床にたたきつけた。";

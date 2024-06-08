@@ -4,7 +4,8 @@
   "scripts": {
     "build": "vite build -w false",
     "watch": "vite build -w true",
-    "storybook": "storybook dev -p 6006 --no-open"
+    "storybook": "storybook dev -p 6006 --no-open",
+    "test":"vitest run"
   },
   "dependencies": {
     "@chromatic-com/storybook": "^1.5.0",
