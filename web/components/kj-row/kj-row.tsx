@@ -1,4 +1,5 @@
 import _ from "lodash";
+import {ForwardIcon} from "lucide-react";
 
 import {splitSentenceOnWord} from "@/lib/sentence-lib";
 
@@ -20,6 +21,10 @@ export function KjRow(props:KjRowProps):JSX.Element
 
     <div className="control">
       <div className="left">
+        <span>
+          <ForwardIcon/>
+          <span>Sentence</span>
+        </span>
         <button>link sentence</button>
         <button>link word</button>
         <button>copy full sentence</button>

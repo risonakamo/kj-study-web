@@ -22,8 +22,7 @@ export default defineConfig({
 
     resolve:{
         alias:{
-            css:`${__dirname}/web/css`,
-            assets:`${__dirname}/web/assets`
+            "@":`${__dirname}/web`,
         }
     },
 
