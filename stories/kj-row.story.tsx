@@ -8,7 +8,8 @@ const meta:Meta<typeof KjRow>={
   title:"KJ row",
   component:KjRow,
   args:{
-
+    sentence:"彼は茶碗を床にたたきつけた。",
+    word:"茶碗"
   }
 };
 export default meta;
