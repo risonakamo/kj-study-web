@@ -1,7 +1,8 @@
 import _ from "lodash";
-import {ForwardIcon} from "lucide-react";
+import {Copy, Flag, Forward} from "lucide-react";
 
 import {splitSentenceOnWord} from "@/lib/sentence";
+import {Button1} from "@/components/button1/button1";
 
 import "./kj-row.styl";
 
@@ -21,17 +22,13 @@ export function KjRow(props:KjRowProps):JSX.Element
 
     <div className="control">
       <div className="left">
-        <span>
-          <ForwardIcon/>
-          <span>Sentence</span>
-        </span>
-        <button>link sentence</button>
-        <button>link word</button>
-        <button>copy full sentence</button>
+        <Button1 icon={<Forward/>} text="Sentence"/>
+        <Button1 icon={<Forward/>} text="Word"/>
+        <Button1 icon={<Copy/>} text="Copy All"/>
       </div>
       <div className="right">
-        <button>flag sentence</button>
-        <button>flag word</button>
+        <Button1 icon={<Flag/>} text="Sentence"/>
+        <Button1 icon={<Flag/>} text="Word"/>
       </div>
     </div>
   </div>;
