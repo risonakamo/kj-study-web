@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`percent-truncate 1`] = `
+[
+  "somethi",
+  "something",
+  "huh",
+  "",
+  "a",
+  "a",
+  "a",
+  "",
+  " adlsn",
+]
+`;

@@ -1,6 +1,7 @@
-import {test} from "vitest";
+import {expect, test} from "vitest";
 
 import {percentTruncate} from "@/lib/utils";
+import _, {result} from "lodash";
 
 test("percent-truncate",()=>{
     const inputs:[string,number][]=[
@@ -15,12 +16,17 @@ test("percent-truncate",()=>{
         [" adlsn asdfnkas dfaksgd",.25]
     ];
 
-    for (let i=0;i<inputs.length;i++)
-    {
+    const results:string[]=_.map(inputs,(input:[string,number]):string=>{
+        const result:string=percentTruncate(input[0],input[1]);
+
         console.log(
-            inputs[i],
+            input,
             "->",
-            percentTruncate(inputs[i][0],inputs[i][1])
+            result
         );
-    }
+
+        return result;
+    });
+
+    expect(results).toMatchSnapshot();
 });

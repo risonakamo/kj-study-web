@@ -1,8 +1,10 @@
 import _ from "lodash";
-import {Copy, Flag, Forward} from "lucide-react";
+import {CopyIcon, Flag, Forward} from "lucide-react";
+import copy from "copy-to-clipboard";
 
 import {splitSentenceOnWord} from "@/lib/sentence";
 import {Button1} from "@/components/button1/button1";
+import {searchForSentenceUrl, searchForWordUrl} from "@/lib/jisho-url";
 
 import "./kj-row.styl";
 
@@ -15,6 +17,24 @@ interface KjRowProps
 /** main row element containing a sentence and all controls for interacting with the sentence */
 export function KjRow(props:KjRowProps):JSX.Element
 {
+  /** clicked on link sentence button. open jisho tab searching for the sentence */
+  function h_linkSentenceClick():void
+  {
+    window.open(searchForSentenceUrl(props.sentence),"_blank");
+  }
+
+  /** clicked link word button. open jisho tab searching for the word */
+  function h_linkWordClick():void
+  {
+    window.open(searchForWordUrl(props.word),"_blank");
+  }
+
+  /** clicked copy all button. copy the sentence */
+  function h_copySentenceClick():void
+  {
+    copy(props.sentence);
+  }
+
   return <div className="kj-row">
     <div className="sentence-contain">
       {generateSentencePieces(props.sentence,props.word)}
@@ -22,9 +42,9 @@ export function KjRow(props:KjRowProps):JSX.Element
 
     <div className="control">
       <div className="left">
-        <Button1 icon={<Forward/>} text="Sentence"/>
-        <Button1 icon={<Forward/>} text="Word"/>
-        <Button1 icon={<Copy/>} text="Copy All"/>
+        <Button1 icon={<Forward/>} text="Sentence" onClick={h_linkSentenceClick}/>
+        <Button1 icon={<Forward/>} text="Word" onClick={h_linkWordClick}/>
+        <Button1 icon={<CopyIcon/>} text="Copy All" onClick={h_copySentenceClick}/>
       </div>
       <div className="right">
         <Button1 icon={<Flag/>} text="Sentence"/>
