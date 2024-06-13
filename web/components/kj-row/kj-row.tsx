@@ -1,10 +1,11 @@
 import _ from "lodash";
-import {CopyIcon, Flag, Forward} from "lucide-react";
+import {CheckIcon, CopyIcon, Flag, Forward, XIcon} from "lucide-react";
 import copy from "copy-to-clipboard";
 
 import {splitSentenceOnWord} from "@/lib/sentence";
 import {Button1} from "@/components/button1/button1";
 import {searchForSentenceUrl, searchForWordUrl} from "@/lib/jisho-url";
+import {Button2} from "@/components//button2/button2";
 
 import "./kj-row.styl";
 
@@ -38,6 +39,11 @@ export function KjRow(props:KjRowProps):JSX.Element
   return <div className="kj-row">
     <div className="sentence-contain">
       {generateSentencePieces(props.sentence,props.word)}
+    </div>
+
+    <div className="state-control">
+      <Button2 buttonStyle="left" icon={<CheckIcon className="check-icon"/>}/>
+      <Button2 buttonStyle="right" icon={<XIcon className="x-icon"/>}/>
     </div>
 
     <div className="control">
