@@ -51,6 +51,6 @@ export default defineConfig({
     },
 
     test:{
-        root:`${__dirname}/web`
+        root:`${__dirname}/tests`
     }
 });
