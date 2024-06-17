@@ -35,7 +35,7 @@ export default defineConfig({
 
         rollupOptions:{
             input:{
-                // "index":`${__dirname}/web/html/index.html`,
+                "index":`${__dirname}/web/html/index.html`,
             },
 
             onLog(level:LogLevel,log:RollupLog,handler:LogHandler):void
