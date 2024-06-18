@@ -2,9 +2,9 @@ import type { StorybookConfig } from "@storybook/react-vite";
 
 const config: StorybookConfig = {
   stories: [
-    "../web/stories/**/*.mdx",
-    "../web/stories/**/*.stories.@(js|jsx|ts|tsx)",
-    "../web/stories/**/*.story.@(js|jsx|ts|tsx)"
+    "../stories/**/*.mdx",
+    "../stories/**/*.stories.@(js|jsx|ts|tsx)",
+    "../stories/**/*.story.@(js|jsx|ts|tsx)"
   ],
   addons: [
     "@storybook/addon-links",
@@ -18,7 +18,6 @@ const config: StorybookConfig = {
         rule: {
           test: [/\.stories\.tsx?$/],
           include: [
-            `${__dirname}/../web`,
             `${__dirname}/../stories`
           ]
         },
