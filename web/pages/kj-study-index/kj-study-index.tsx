@@ -1,20 +1,37 @@
 import {createRoot} from "react-dom/client";
-import { useEffect } from "react";
 
-import {getKjFile} from "@/apis/kj-study";
+import {KjRow} from "@/components/kj-row/kj-row";
 
 import "./kj-study-index.styl";
 
 function KjStudyIndex():JSX.Element
 {
-  useEffect(()=>{
-    (async ()=>{
-      console.log(await getKjFile("1"));
-    })();
-  },[]);
-
   return <>
-    hello
+    <div className="top">
+
+    </div>
+    <div className="kj-rows">
+      <KjRow
+        sentence="子どもの頃、絵本で海の宮殿の物語を読んで、どんなところなのだろうと想像していた。"
+        word="名所"
+      />
+      <KjRow
+        sentence="子どもの頃、絵本で海の宮殿の物語を読んで、どんなところなのだろうと想像していた。"
+        word="名所"
+      />
+      <KjRow
+        sentence="子どもの頃、絵本で海の宮殿の物語を読んで、どんなところなのだろうと想像していた。"
+        word="名所"
+      />
+      <KjRow
+        sentence="子どもの頃、絵本で海の宮殿の物語を読んで、どんなところなのだろうと想像していた。"
+        word="名所"
+      />
+      <KjRow
+        sentence="子どもの頃、絵本で海の宮殿の物語を読んで、どんなところなのだろうと想像していた。"
+        word="名所"
+      />
+    </div>
   </>;
 }
 
