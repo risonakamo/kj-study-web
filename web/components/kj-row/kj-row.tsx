@@ -38,7 +38,14 @@ export function KjRow(props:KjRowProps):JSX.Element
 
   return <div className="kj-row">
     <div className="sentence-contain">
-      {generateSentencePieces(props.sentence,props.word)}
+      <div className="word">
+        <span className="bubble">
+          {props.word}
+        </span>
+      </div>
+      <div className="sentence">
+        {generateSentencePieces(props.sentence,props.word)}
+      </div>
     </div>
 
     <div className="state-control">
