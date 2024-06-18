@@ -17,6 +17,10 @@ function KjStudyIndex():JSX.Element
 
     initialData:{},
 
+    // refetchOnMount:false,
+    refetchOnWindowFocus:false,
+    refetchOnReconnect:false,
+
     async queryFn():Promise<WordSentenceDict>
     {
       console.log("huh");
