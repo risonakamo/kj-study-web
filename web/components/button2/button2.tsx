@@ -8,6 +8,8 @@ interface Button2Props
 {
   buttonStyle:Button2Style
   icon:JSX.Element
+
+  onClick?():void
 }
 
 /** a wide rounded button with icon field only */
@@ -18,7 +20,7 @@ export function Button2(props:Button2Props):JSX.Element
     "right-button":props.buttonStyle=="right"
   });
 
-  return <div className={topcx}>
+  return <div className={topcx} onClick={props.onClick}>
     {props.icon}
   </div>;
 }

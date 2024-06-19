@@ -1,6 +1,8 @@
 import _ from "lodash";
 import {CheckIcon, CopyIcon, Flag, Forward, XIcon} from "lucide-react";
 import copy from "copy-to-clipboard";
+import clsx from "clsx";
+import {useState} from "react";
 
 import {splitSentenceOnWord} from "@/lib/sentence";
 import {Button1} from "@/components/button1/button1";
@@ -8,6 +10,9 @@ import {searchForSentenceUrl, searchForWordUrl} from "@/lib/jisho-url";
 import {Button2} from "@/components//button2/button2";
 
 import "./kj-row.styl";
+
+/** visual appearance states of kj row */
+type KjRowStatus="normal"|"checked"|"xed"
 
 interface KjRowProps
 {
@@ -18,6 +23,8 @@ interface KjRowProps
 /** main row element containing a sentence and all controls for interacting with the sentence */
 export function KjRow(props:KjRowProps):JSX.Element
 {
+  const [status,setStatus]=useState<KjRowStatus>("normal");
+
   /** clicked on link sentence button. open jisho tab searching for the sentence */
   function h_linkSentenceClick():void
   {
@@ -36,7 +43,40 @@ export function KjRow(props:KjRowProps):JSX.Element
     copy(props.sentence);
   }
 
-  return <div className="kj-row">
+  /** clicked check button. if already checked, set state to unchecked. otherwise, set to checked. */
+  function h_clickedCheck():void
+  {
+    if (status=="checked")
+    {
+      setStatus("normal");
+    }
+
+    else
+    {
+      setStatus("checked");
+    }
+  }
+
+  /** clicked X button. if already xed, set to normal. otherwise, set to Xed */
+  function h_clickedXed():void
+  {
+    if (status=="xed")
+    {
+      setStatus("normal");
+    }
+
+    else
+    {
+      setStatus("xed");
+    }
+  }
+
+  const topCx:string=clsx("kj-row",{
+    checked:status=="checked",
+    xed:status=="xed"
+  });
+
+  return <div className={topCx}>
     <div className="sentence-contain">
       <div className="word">
         <span className="bubble">
@@ -49,8 +89,8 @@ export function KjRow(props:KjRowProps):JSX.Element
     </div>
 
     <div className="state-control">
-      <Button2 buttonStyle="left" icon={<CheckIcon className="check-icon"/>}/>
-      <Button2 buttonStyle="right" icon={<XIcon className="x-icon"/>}/>
+      <Button2 buttonStyle="left" icon={<CheckIcon className="check-icon"/>} onClick={h_clickedCheck}/>
+      <Button2 buttonStyle="right" icon={<XIcon className="x-icon"/>} onClick={h_clickedXed}/>
     </div>
 
     <div className="control">

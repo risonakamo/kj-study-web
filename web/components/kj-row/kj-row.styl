@@ -1,6 +1,6 @@
 .kj-row
-    padding-bottom: 16px
     border-bottom: 1px solid black
+    padding: 15px 16px 16px
 
     .sentence-contain
         font-size: 20px
@@ -20,6 +20,10 @@
             span.highlighted
                 color: #a7cb49
                 font-weight: 500
+
+                // while parent is checked or xed, darken the highlight
+                ~/.checked ^[1..-1], ~/.xed ^[1..-1]
+                    color: #607820
 
     .state-control
         display: flex
@@ -45,3 +49,11 @@
 
         .left
             flex: 1
+
+    &.checked
+        opacity: .6
+        background: #89c18945
+
+    &.xed
+        opacity: .6
+        background: #bf465040
