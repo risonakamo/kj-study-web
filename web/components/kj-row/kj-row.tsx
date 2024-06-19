@@ -7,7 +7,7 @@ import {useState} from "react";
 import {splitSentenceOnWord} from "@/lib/sentence";
 import {Button1} from "@/components/button1/button1";
 import {searchForSentenceUrl, searchForWordUrl} from "@/lib/jisho-url";
-import {Button2} from "@/components//button2/button2";
+import {Button2, Button2State} from "@/components//button2/button2";
 
 import "./kj-row.styl";
 
@@ -23,8 +23,12 @@ interface KjRowProps
 /** main row element containing a sentence and all controls for interacting with the sentence */
 export function KjRow(props:KjRowProps):JSX.Element
 {
+  // --- states
   const [status,setStatus]=useState<KjRowStatus>("normal");
 
+
+
+  // --- handlers
   /** clicked on link sentence button. open jisho tab searching for the sentence */
   function h_linkSentenceClick():void
   {
@@ -71,11 +75,29 @@ export function KjRow(props:KjRowProps):JSX.Element
     }
   }
 
+
+  // --- render vars
   const topCx:string=clsx("kj-row",{
     checked:status=="checked",
     xed:status=="xed"
   });
 
+  var checkButtonStatus:Button2State="normal";
+  var exButtonStatus:Button2State="normal";
+
+  if (status=="checked")
+  {
+    checkButtonStatus="active-green";
+  }
+
+  else if (status=="xed")
+  {
+    exButtonStatus="active-red";
+  }
+
+
+
+  // --- render
   return <div className={topCx}>
     <div className="sentence-contain">
       <div className="word">
@@ -89,8 +111,10 @@ export function KjRow(props:KjRowProps):JSX.Element
     </div>
 
     <div className="state-control">
-      <Button2 buttonStyle="left" icon={<CheckIcon className="check-icon"/>} onClick={h_clickedCheck}/>
-      <Button2 buttonStyle="right" icon={<XIcon className="x-icon"/>} onClick={h_clickedXed}/>
+      <Button2 buttonStyle="left" icon={<CheckIcon className="check-icon"/>} onClick={h_clickedCheck}
+        state={checkButtonStatus}/>
+      <Button2 buttonStyle="right" icon={<XIcon className="x-icon"/>} onClick={h_clickedXed}
+        state={exButtonStatus}/>
     </div>
 
     <div className="control">

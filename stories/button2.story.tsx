@@ -16,7 +16,14 @@ export default meta;
 
 export const normal:Story={
   render:()=>(<>
-    <Button2 buttonStyle="left" icon={<CheckIcon/>}/>
-    <Button2 buttonStyle="right" icon={<XIcon/>}/>
+    <Button2 buttonStyle="left" icon={<CheckIcon/>} state="normal"/>
+    <Button2 buttonStyle="right" icon={<XIcon/>} state="normal"/>
+  </>)
+};
+
+export const active:Story={
+  render:()=>(<>
+    <Button2 buttonStyle="left" icon={<CheckIcon/>} state="active-green"/>
+    <Button2 buttonStyle="right" icon={<XIcon/>} state="active-red"/>
   </>)
 };
