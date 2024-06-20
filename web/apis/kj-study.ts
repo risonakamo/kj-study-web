@@ -12,8 +12,8 @@ export async function getKjFiles():Promise<string[]>
     return (await ax.get("/get-kj-files")).data;
 }
 
-/** get target kj file */
-export async function getKjFile(filename:string):Promise<WordSentenceDict>
+/** get the session */
+export async function getKjSession():Promise<KjStudySession>
 {
-    return (await ax.get(`/get-kj-file/${filename}`)).data;
+    return (await ax.get("/get-session")).data;
 }
