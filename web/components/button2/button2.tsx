@@ -6,7 +6,7 @@ import "./button2.styl";
 type Button2Style="left"|"right"
 
 /** active state style */
-export type Button2State="normal"|"active-green"|"active-red"
+export type Button2State="normal"|"active-green"|"active-red"|"sub-active"
 
 interface Button2Props
 {
@@ -26,6 +26,7 @@ export function Button2(props:Button2Props):JSX.Element
 
     "active-green":props.state=="active-green",
     "active-red":props.state=="active-red",
+    "sub-active":props.state=="sub-active"
   });
 
   return <div className={topcx} onClick={props.onClick}>

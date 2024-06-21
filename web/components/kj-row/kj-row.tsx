@@ -88,11 +88,13 @@ export function KjRow(props:KjRowProps):JSX.Element
   if (status=="checked")
   {
     checkButtonStatus="active-green";
+    exButtonStatus="sub-active";
   }
 
   else if (status=="xed")
   {
     exButtonStatus="active-red";
+    checkButtonStatus="sub-active";
   }
 
 
