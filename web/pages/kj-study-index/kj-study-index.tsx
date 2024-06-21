@@ -1,6 +1,7 @@
 import {createRoot} from "react-dom/client";
 import {QueryClient,QueryClientProvider, useQuery} from "@tanstack/react-query";
 import _ from "lodash";
+import {useMemo} from "react";
 
 import {KjRow} from "@/components/kj-row/kj-row";
 import {getKjSession} from "@/apis/kj-study";
@@ -26,10 +27,15 @@ function KjStudyIndex():JSX.Element
     }
   });
 
+  /** dervied word sentence list that is shuffled */
+  const shuffledSentences:WordSentencePair[]=useMemo(()=>{
+    return _.shuffle(kjSessionQy.data.wordSentences);
+  },[kjSessionQy.data]);
+
   /** render the kj rows from the kj data list */
   function r_kjRows():JSX.Element[]
   {
-    return _.map(kjSessionQy.data.wordSentences,(data:WordSentencePair):JSX.Element=>{
+    return _.map(shuffledSentences,(data:WordSentencePair):JSX.Element=>{
       return <KjRow key={data.word} word={data.word} sentence={data.sentence}/>;
     });
   }
