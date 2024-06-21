@@ -3,7 +3,7 @@ import {QueryClient,QueryClientProvider, useQuery} from "@tanstack/react-query";
 import _ from "lodash";
 import {useMemo} from "react";
 
-import {KjRow} from "@/components/kj-row/kj-row";
+import {KjRow, KjRowStatus} from "@/components/kj-row/kj-row";
 import {getKjSession} from "@/apis/kj-study";
 
 import "./kj-study-index.styl";
@@ -35,8 +35,14 @@ function KjStudyIndex():JSX.Element
   /** render the kj rows from the kj data list */
   function r_kjRows():JSX.Element[]
   {
+    function h_statusChange(newStatus:KjRowStatus):void
+    {
+
+    }
+
     return _.map(shuffledSentences,(data:WordSentencePair):JSX.Element=>{
-      return <KjRow key={data.word} word={data.word} sentence={data.sentence}/>;
+      return <KjRow key={data.word} word={data.word} sentence={data.sentence}
+        sentenceState={sentenceStatusToKjRowStatus(data.status)} onStatusChange={h_statusChange}/>;
     });
   }
 
@@ -49,6 +55,21 @@ function KjStudyIndex():JSX.Element
       {r_kjRows()}
     </div>
   </>;
+}
+
+/** convert sentence status to kj row status. these should probably be unifed at some point */
+function sentenceStatusToKjRowStatus(sentenceStatus:WordSentenceStatus):KjRowStatus
+{
+  switch (sentenceStatus)
+  {
+    case "active-green":
+    return "checked";
+
+    case "active-red":
+    return "xed";
+  }
+
+  return "normal";
 }
 
 function main()

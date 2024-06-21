@@ -2,7 +2,6 @@ import _ from "lodash";
 import {CheckIcon, CopyIcon, Flag, Forward, XIcon} from "lucide-react";
 import copy from "copy-to-clipboard";
 import clsx from "clsx";
-import {useState} from "react";
 
 import {splitSentenceOnWord} from "@/lib/sentence";
 import {Button1} from "@/components/button1/button1";
@@ -12,22 +11,20 @@ import {Button2, Button2State} from "@/components//button2/button2";
 import "./kj-row.styl";
 
 /** visual appearance states of kj row */
-type KjRowStatus="normal"|"checked"|"xed"
+export type KjRowStatus="normal"|"checked"|"xed"
 
 interface KjRowProps
 {
   sentence:string
   word:string
+  sentenceState:KjRowStatus
+
+  onStatusChange(newStatus:KjRowStatus):void
 }
 
 /** main row element containing a sentence and all controls for interacting with the sentence */
 export function KjRow(props:KjRowProps):JSX.Element
 {
-  // --- states
-  const [status,setStatus]=useState<KjRowStatus>("normal");
-
-
-
   // --- handlers
   /** clicked on link sentence button. open jisho tab searching for the sentence */
   function h_linkSentenceClick():void
@@ -50,48 +47,48 @@ export function KjRow(props:KjRowProps):JSX.Element
   /** clicked check button. if already checked, set state to unchecked. otherwise, set to checked. */
   function h_clickedCheck():void
   {
-    if (status=="checked")
+    if (props.sentenceState=="checked")
     {
-      setStatus("normal");
+      props.onStatusChange("normal");
     }
 
     else
     {
-      setStatus("checked");
+      props.onStatusChange("checked");
     }
   }
 
   /** clicked X button. if already xed, set to normal. otherwise, set to Xed */
   function h_clickedXed():void
   {
-    if (status=="xed")
+    if (props.sentenceState=="xed")
     {
-      setStatus("normal");
+      props.onStatusChange("normal");
     }
 
     else
     {
-      setStatus("xed");
+      props.onStatusChange("xed");
     }
   }
 
 
   // --- render vars
   const topCx:string=clsx("kj-row",{
-    checked:status=="checked",
-    xed:status=="xed"
+    checked:props.sentenceState=="checked",
+    xed:props.sentenceState=="xed"
   });
 
   var checkButtonStatus:Button2State="normal";
   var exButtonStatus:Button2State="normal";
 
-  if (status=="checked")
+  if (props.sentenceState=="checked")
   {
     checkButtonStatus="active-green";
     exButtonStatus="sub-active";
   }
 
-  else if (status=="xed")
+  else if (props.sentenceState=="xed")
   {
     exButtonStatus="active-red";
     checkButtonStatus="sub-active";

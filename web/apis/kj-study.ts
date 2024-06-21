@@ -17,3 +17,19 @@ export async function getKjSession():Promise<KjStudySession>
 {
     return (await ax.get("/get-session")).data;
 }
+
+/** send request to set the sentence state */
+export async function apiSetSentenceState(
+    word:string,
+    sentence:string,
+    newState:WordSentenceStatus
+):Promise<void>
+{
+    const data:WordSentencePair={
+        word,
+        sentence,
+        status:newState
+    };
+
+    return ax.post("/set-sentence-state",data);
+}
