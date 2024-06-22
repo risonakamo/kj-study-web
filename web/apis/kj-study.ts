@@ -33,3 +33,9 @@ export async function apiSetSentenceState(
 
     return ax.post("/set-sentence-state",data);
 }
+
+/** request to shuffle the session. gets new session back */
+export async function apiShuffleSentences():Promise<KjStudySession>
+{
+    return (await ax.get("/shuffle-session")).data;
+}

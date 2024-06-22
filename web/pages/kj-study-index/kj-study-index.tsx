@@ -5,7 +5,7 @@ import {useEffect, useMemo, useRef} from "react";
 import {useImmer}  from "use-immer";
 
 import {KjRow, KjRowStatus} from "@/components/kj-row/kj-row";
-import {apiSetSentenceState, getKjSession} from "@/apis/kj-study";
+import {apiSetSentenceState, apiShuffleSentences, getKjSession} from "@/apis/kj-study";
 import {updateSentenceListStatus} from "@/lib/word-sentence";
 import {Button1} from "@/components/button1/button1";
 import {RefreshCcw} from "lucide-react";
@@ -54,6 +54,20 @@ function KjStudyIndex():JSX.Element
     }
   });
 
+  /** call to shuffle sentences. set the state on getting new sentences */
+  const shuffleSessionMqy=useMutation<KjStudySession>({
+    mutationFn():Promise<KjStudySession>
+    {
+      return apiShuffleSentences();
+    },
+
+    // set the word sentences to the result
+    onSuccess(data:KjStudySession):void
+    {
+      setSentences(data.wordSentences);
+    }
+  });
+
 
 
   // --- effects
@@ -72,12 +86,24 @@ function KjStudyIndex():JSX.Element
   },[kjSessionQy.data]);
 
 
+
+
   // --- derived
   /** dervied word sentence list that is shuffled */
   // const shuffledSentences:WordSentencePair[]=useMemo(()=>{
   //   return _.shuffle(kjSessionQy.data.wordSentences);
   // },[kjSessionQy.data]);
 
+
+  // --- handlers
+  /** clicked shuffle session button. trigger shuffle session request */
+  function h_shuffleSessionButton():void
+  {
+    shuffleSessionMqy.mutateAsync();
+  }
+
+
+  // --- render funcs
   /** render the kj rows from the kj data list */
   function r_kjRows():JSX.Element[]
   {
@@ -109,10 +135,13 @@ function KjStudyIndex():JSX.Element
     });
   }
 
+
+
+  // --- render
   return <>
     <div className="contain">
       <div className="top">
-        <Button1 icon={<RefreshCcw/>} text="Shuffle Session"/>
+        <Button1 icon={<RefreshCcw/>} text="Shuffle Session" onClick={h_shuffleSessionButton}/>
       </div>
 
       <div className="kj-rows">
