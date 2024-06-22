@@ -7,6 +7,8 @@ import {useImmer}  from "use-immer";
 import {KjRow, KjRowStatus} from "@/components/kj-row/kj-row";
 import {apiSetSentenceState, getKjSession} from "@/apis/kj-study";
 import {updateSentenceListStatus} from "@/lib/word-sentence";
+import {Button1} from "@/components/button1/button1";
+import {RefreshCcw} from "lucide-react";
 
 import "./kj-study-index.styl";
 
@@ -109,7 +111,7 @@ function KjStudyIndex():JSX.Element
 
   return <>
     <div className="top">
-
+      <Button1 icon={<RefreshCcw/>} text="Shuffle Session"/>
     </div>
 
     <div className="kj-rows">
