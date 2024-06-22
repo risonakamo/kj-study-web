@@ -16,8 +16,11 @@ const QyClient:QueryClient=new QueryClient();
 
 function KjStudyIndex():JSX.Element
 {
-  /** the current sentences list */
-  const [sentences,setSentences]=useImmer<WordSentencePair[]>([]);
+  // --- states
+  /** the current session */
+  const [session,setSession]=useImmer<KjStudySession>({
+    wordSentences:[]
+  });
 
   /** if did initial shuffle after first data load */
   const didShuffle=useRef<boolean>(false);
@@ -25,24 +28,27 @@ function KjStudyIndex():JSX.Element
 
 
   // --- qys
-  /** the session */
-  const kjSessionQy=useQuery<KjStudySession>({
-    queryKey:["kj-session"],
-
-    initialData:{
-      wordSentences:[]
-    },
-
-    refetchOnWindowFocus:false,
-    refetchOnReconnect:false,
-
-    async queryFn():Promise<KjStudySession>
+  /** initial api call to get session. sets the session state after completion. shuffles the
+   *  words in the retrieved session, but only the first time this is called */
+  const getSessionMqy=useMutation<KjStudySession>({
+    mutationFn():Promise<KjStudySession>
     {
       return getKjSession();
+    },
+
+    onSuccess(data:KjStudySession):void
+    {
+      if (!didShuffle.current)
+      {
+        setSessionAndShuffle(data);
+        didShuffle.current=true;
+      }
+
+      setSession(data);
     }
   });
 
-  /** call to update backend data */
+  /** call to update backend data. does nothing with frontend data */
   const updateSentenceStateMqy=useMutation({
     mutationFn(wordSentenceUpdate:WordSentencePair):Promise<void>
     {
@@ -64,35 +70,27 @@ function KjStudyIndex():JSX.Element
     // set the word sentences to the result
     onSuccess(data:KjStudySession):void
     {
-      setSentences(data.wordSentences);
+      setSessionAndShuffle(data);
     }
   });
 
 
 
   // --- effects
-  // on session data changing from qy, update the mirrored sentences state with shuffling, but only
-  // shuffle once.
+  /** call initial session get */
   useEffect(()=>{
-    var sentences:WordSentencePair[]=kjSessionQy.data.wordSentences;
-
-    if (sentences.length && !didShuffle.current)
-    {
-      sentences=_.shuffle(sentences);
-      didShuffle.current=true;
-    }
-
-    setSentences(sentences);
-  },[kjSessionQy.data]);
+    getSessionMqy.mutateAsync();
+  },[]);
 
 
+  // --- state setters
+  /** set a session, but shuffle before doing so */
+  function setSessionAndShuffle(newSession:KjStudySession):void
+  {
+    newSession.wordSentences=_.shuffle(newSession.wordSentences);
+    setSession(newSession);
+  }
 
-
-  // --- derived
-  /** dervied word sentence list that is shuffled */
-  // const shuffledSentences:WordSentencePair[]=useMemo(()=>{
-  //   return _.shuffle(kjSessionQy.data.wordSentences);
-  // },[kjSessionQy.data]);
 
 
   // --- handlers
@@ -107,15 +105,15 @@ function KjStudyIndex():JSX.Element
   /** render the kj rows from the kj data list */
   function r_kjRows():JSX.Element[]
   {
-    return _.map(sentences,(data:WordSentencePair):JSX.Element=>{
+    return _.map(session.wordSentences,(data:WordSentencePair):JSX.Element=>{
       /** row's status changed. update the web-side state and send mqy to update the backend state */
       function h_statusChange(newStatus:KjRowStatus):void
       {
         const newStatus2:WordSentenceStatus=kjRowStatusToSentenceStatus(newStatus);
 
-        setSentences((draft)=>{
+        setSession((draft)=>{
           updateSentenceListStatus(
-            draft,
+            draft.wordSentences,
 
             data.word,
             data.sentence,
@@ -130,8 +128,13 @@ function KjStudyIndex():JSX.Element
         });
       }
 
-      return <KjRow key={data.word} word={data.word} sentence={data.sentence}
-        sentenceState={sentenceStatusToKjRowStatus(data.status)} onStatusChange={h_statusChange}/>;
+      return <KjRow
+        key={data.word+data.sentence}
+        word={data.word}
+        sentence={data.sentence}
+        sentenceState={sentenceStatusToKjRowStatus(data.status)}
+        onStatusChange={h_statusChange}
+      />;
     });
   }
 
