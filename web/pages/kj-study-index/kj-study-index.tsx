@@ -110,12 +110,14 @@ function KjStudyIndex():JSX.Element
   }
 
   return <>
-    <div className="top">
-      <Button1 icon={<RefreshCcw/>} text="Shuffle Session"/>
-    </div>
+    <div className="contain">
+      <div className="top">
+        <Button1 icon={<RefreshCcw/>} text="Shuffle Session"/>
+      </div>
 
-    <div className="kj-rows">
-      {r_kjRows()}
+      <div className="kj-rows">
+        {r_kjRows()}
+      </div>
     </div>
   </>;
 }

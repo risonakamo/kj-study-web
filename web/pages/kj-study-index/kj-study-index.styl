@@ -1,18 +1,20 @@
 @import url("@/css/fonts.styl")
 
+body
+    margin: 20px 0 50px
+
 main
     display: flex
     justify-content: center
     flex-direction: column
     align-items: center
 
-    .top
-        height: 120px
-        width: 100%
-
-    .kj-rows
+    .contain
         width: 45%
         min-width: 610px
+
+        .top
+            margin-bottom: 10px
 
         @media (max-width: 610px)
             width: 100%
