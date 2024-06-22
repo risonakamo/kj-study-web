@@ -1,15 +1,25 @@
 import {createRoot} from "react-dom/client";
-import {QueryClient,QueryClientProvider, useQuery} from "@tanstack/react-query";
+import {QueryClient,QueryClientProvider, useMutation, useQuery} from "@tanstack/react-query";
 import _ from "lodash";
-import {useMemo} from "react";
+import {useEffect, useMemo} from "react";
+import {useImmer}  from "use-immer";
 
 import {KjRow, KjRowStatus} from "@/components/kj-row/kj-row";
-import {getKjSession} from "@/apis/kj-study";
+import {apiSetSentenceState, getKjSession} from "@/apis/kj-study";
+import {updateSentenceListStatus} from "@/lib/word-sentence";
 
 import "./kj-study-index.styl";
 
+const QyClient:QueryClient=new QueryClient();
+
 function KjStudyIndex():JSX.Element
 {
+  /** the current sentences list */
+  const [sentences,setSentences]=useImmer<WordSentencePair[]>([]);
+
+
+
+  // --- qys
   /** the session */
   const kjSessionQy=useQuery<KjStudySession>({
     queryKey:["kj-session"],
@@ -27,20 +37,59 @@ function KjStudyIndex():JSX.Element
     }
   });
 
-  /** dervied word sentence list that is shuffled */
-  const shuffledSentences:WordSentencePair[]=useMemo(()=>{
-    return _.shuffle(kjSessionQy.data.wordSentences);
+  /** call to update backend data */
+  const updateSentenceStateMqy=useMutation({
+    mutationFn(wordSentenceUpdate:WordSentencePair):Promise<void>
+    {
+      return apiSetSentenceState(
+        wordSentenceUpdate.word,
+        wordSentenceUpdate.sentence,
+        wordSentenceUpdate.status,
+      );
+    }
+  });
+
+
+
+  // --- effects
+  // on session data changing from qy, update the mirrored sentences state
+  useEffect(()=>{
+    setSentences(kjSessionQy.data.wordSentences);
   },[kjSessionQy.data]);
+
+
+  // --- derived
+  /** dervied word sentence list that is shuffled */
+  // const shuffledSentences:WordSentencePair[]=useMemo(()=>{
+  //   return _.shuffle(kjSessionQy.data.wordSentences);
+  // },[kjSessionQy.data]);
 
   /** render the kj rows from the kj data list */
   function r_kjRows():JSX.Element[]
   {
-    function h_statusChange(newStatus:KjRowStatus):void
-    {
+    return _.map(sentences,(data:WordSentencePair):JSX.Element=>{
+      /** row's status changed. update the web-side state and send mqy to update the backend state */
+      function h_statusChange(newStatus:KjRowStatus):void
+      {
+        const newStatus2:WordSentenceStatus=kjRowStatusToSentenceStatus(newStatus);
 
-    }
+        setSentences((draft)=>{
+          updateSentenceListStatus(
+            draft,
 
-    return _.map(shuffledSentences,(data:WordSentencePair):JSX.Element=>{
+            data.word,
+            data.sentence,
+            newStatus2,
+          )
+        });
+
+        updateSentenceStateMqy.mutateAsync({
+          word:data.word,
+          sentence:data.sentence,
+          status:newStatus2
+        });
+      }
+
       return <KjRow key={data.word} word={data.word} sentence={data.sentence}
         sentenceState={sentenceStatusToKjRowStatus(data.status)} onStatusChange={h_statusChange}/>;
     });
@@ -72,10 +121,25 @@ function sentenceStatusToKjRowStatus(sentenceStatus:WordSentenceStatus):KjRowSta
   return "normal";
 }
 
+/** convert kj row status into sentence status */
+function kjRowStatusToSentenceStatus(rowStatus:KjRowStatus):WordSentenceStatus
+{
+  switch (rowStatus)
+  {
+    case "checked":
+    return "active-green";
+
+    case "xed":
+    return "active-red";
+  }
+
+  return "normal";
+}
+
 function main()
 {
   createRoot(document.querySelector("main")!).render(
-    <QueryClientProvider client={new QueryClient()}>
+    <QueryClientProvider client={QyClient}>
       <KjStudyIndex/>
     </QueryClientProvider>
   );
