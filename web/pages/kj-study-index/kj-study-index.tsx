@@ -1,7 +1,7 @@
 import {createRoot} from "react-dom/client";
 import {QueryClient,QueryClientProvider, useMutation, useQuery} from "@tanstack/react-query";
 import _ from "lodash";
-import {useEffect, useMemo} from "react";
+import {useEffect, useMemo, useRef} from "react";
 import {useImmer}  from "use-immer";
 
 import {KjRow, KjRowStatus} from "@/components/kj-row/kj-row";
@@ -16,6 +16,9 @@ function KjStudyIndex():JSX.Element
 {
   /** the current sentences list */
   const [sentences,setSentences]=useImmer<WordSentencePair[]>([]);
+
+  /** if did initial shuffle after first data load */
+  const didShuffle=useRef<boolean>(false);
 
 
 
@@ -52,9 +55,18 @@ function KjStudyIndex():JSX.Element
 
 
   // --- effects
-  // on session data changing from qy, update the mirrored sentences state
+  // on session data changing from qy, update the mirrored sentences state with shuffling, but only
+  // shuffle once.
   useEffect(()=>{
-    setSentences(kjSessionQy.data.wordSentences);
+    var sentences:WordSentencePair[]=kjSessionQy.data.wordSentences;
+
+    if (sentences.length && !didShuffle.current)
+    {
+      sentences=_.shuffle(sentences);
+      didShuffle.current=true;
+    }
+
+    setSentences(sentences);
   },[kjSessionQy.data]);
 
 
