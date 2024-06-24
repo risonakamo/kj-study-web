@@ -1,12 +1,14 @@
 import {createRoot} from "react-dom/client";
 import {QueryClient,QueryClientProvider, useMutation, useQuery} from "@tanstack/react-query";
 import _ from "lodash";
-import {useEffect, useMemo, useRef} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {useImmer}  from "use-immer";
 import {ArrowRight, RefreshCcw} from "lucide-react";
+import NatCompare from "natural-compare";
 
 import {KjRow, KjRowStatus} from "@/components/kj-row/kj-row";
-import {apiSetSentenceState, apiShuffleSentences, getKjSession} from "@/apis/kj-study";
+import {apiSetSentenceState, apiShuffleSentences, getKjFiles, getKjSession,
+  startNewSession} from "@/apis/kj-study";
 import {updateSentenceListStatus} from "@/lib/word-sentence";
 import {Button1} from "@/components/button1/button1";
 
@@ -25,9 +27,30 @@ function KjStudyIndex():JSX.Element
   /** if did initial shuffle after first data load */
   const didShuffle=useRef<boolean>(false);
 
+  const [selectedDatafile,setSelectedDatafile]=useState<string|undefined>(undefined);
+
 
 
   // --- qys
+  /** the list of data files */
+  const datafilesListQy=useQuery<string[]>({
+    queryKey:["datafiles-list"],
+    initialData:[],
+
+    refetchOnWindowFocus:false,
+    refetchOnReconnect:false,
+
+    queryFn():Promise<string[]>
+    {
+      return getKjFiles();
+    },
+
+    select(data:string[]):string[]
+    {
+      return data.sort(NatCompare);
+    }
+  });
+
   /** initial api call to get session. sets the session state after completion. shuffles the
    *  words in the retrieved session, but only the first time this is called */
   const getSessionMqy=useMutation<KjStudySession>({
@@ -74,6 +97,20 @@ function KjStudyIndex():JSX.Element
     }
   });
 
+  /** call to load new session. once get new session, set it and shuffle */
+  const loadNewSessionMqy=useMutation<KjStudySession,Error,string>({
+    mutationFn(targetDatafile:string):Promise<KjStudySession>
+    {
+      return startNewSession(targetDatafile);
+    },
+
+    // set session to new session
+    onSuccess(data:KjStudySession):void
+    {
+      setSessionAndShuffle(data);
+    }
+  });
+
 
 
   // --- effects
@@ -98,6 +135,24 @@ function KjStudyIndex():JSX.Element
   function h_shuffleSessionButton():void
   {
     shuffleSessionMqy.mutateAsync();
+  }
+
+  /** selected new value in the datafile selector. set the selection */
+  function h_datafileSelectorChange(e:React.ChangeEvent<HTMLSelectElement>):void
+  {
+    setSelectedDatafile(e.currentTarget.value);
+  }
+
+  /** clicked to load data file. call api to load new session, if a datafile is actually selected */
+  function h_loadDatafileClick():void
+  {
+    if (!selectedDatafile || !selectedDatafile.length)
+    {
+      console.log("no datafile");
+      return;
+    }
+
+    loadNewSessionMqy.mutateAsync(selectedDatafile);
   }
 
 
@@ -138,6 +193,14 @@ function KjStudyIndex():JSX.Element
     });
   }
 
+  /** render the list of available data files */
+  function r_datafilesList():JSX.Element[]
+  {
+    return _.map(datafilesListQy.data,(datafileName:string)=>{
+      return <option key={datafileName} value={datafileName}>{datafileName}</option>;
+    });
+  }
+
 
 
   // --- render
@@ -148,12 +211,10 @@ function KjStudyIndex():JSX.Element
           <Button1 icon={<RefreshCcw/>} text="Shuffle Session" onClick={h_shuffleSessionButton}/>
         </div>
         <div className="right">
-          <select className="data-selector">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
+          <select className="data-selector" onChange={h_datafileSelectorChange} value={selectedDatafile}>
+            {r_datafilesList()}
           </select>
-          <Button1 icon={<ArrowRight/>} text="Load Data"/>
+          <Button1 icon={<ArrowRight/>} text="Load Data" onClick={h_loadDatafileClick}/>
         </div>
       </div>
 

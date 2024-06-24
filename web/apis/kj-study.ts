@@ -39,3 +39,9 @@ export async function apiShuffleSentences():Promise<KjStudySession>
 {
     return (await ax.get("/shuffle-session")).data;
 }
+
+/** start a new session. gets the session data back */
+export async function startNewSession(sessionDataFile:string):Promise<KjStudySession>
+{
+    return (await ax.get(`/start-new-session/${sessionDataFile}`)).data;
+}
