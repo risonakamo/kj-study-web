@@ -15,6 +15,18 @@ main
 
         .top
             margin-bottom: 10px
+            display: flex
+
+            & > div
+                flex: 1
+
+            .right
+                display: flex
+                justify-content: flex-end
+
+                .data-selector
+                    width 80px
+                    margin-right: 15px
 
         @media (max-width: 610px)
             width: 100%

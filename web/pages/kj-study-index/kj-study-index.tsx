@@ -3,12 +3,12 @@ import {QueryClient,QueryClientProvider, useMutation, useQuery} from "@tanstack/
 import _ from "lodash";
 import {useEffect, useMemo, useRef} from "react";
 import {useImmer}  from "use-immer";
+import {ArrowRight, RefreshCcw} from "lucide-react";
 
 import {KjRow, KjRowStatus} from "@/components/kj-row/kj-row";
 import {apiSetSentenceState, apiShuffleSentences, getKjSession} from "@/apis/kj-study";
 import {updateSentenceListStatus} from "@/lib/word-sentence";
 import {Button1} from "@/components/button1/button1";
-import {RefreshCcw} from "lucide-react";
 
 import "./kj-study-index.styl";
 
@@ -144,7 +144,17 @@ function KjStudyIndex():JSX.Element
   return <>
     <div className="contain">
       <div className="top">
-        <Button1 icon={<RefreshCcw/>} text="Shuffle Session" onClick={h_shuffleSessionButton}/>
+        <div className="left">
+          <Button1 icon={<RefreshCcw/>} text="Shuffle Session" onClick={h_shuffleSessionButton}/>
+        </div>
+        <div className="right">
+          <select className="data-selector">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+          </select>
+          <Button1 icon={<ArrowRight/>} text="Load Data"/>
+        </div>
       </div>
 
       <div className="kj-rows">
