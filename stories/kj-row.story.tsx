@@ -17,3 +17,23 @@ export default meta;
 export const normal:Story={
 
 };
+
+export const selected:Story={
+  args:{
+    selected:true
+  }
+};
+
+export const SelectedRed: Story = {
+  args:{
+    selected: true,
+    sentenceState: "xed"
+  }
+};
+
+export const SelectedGreen:Story={
+  args:{
+    selected:true,
+    sentenceState:"checked"
+  }
+};

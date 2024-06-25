@@ -19,6 +19,8 @@ interface KjRowProps
   word:string
   sentenceState:KjRowStatus
 
+  selected?:boolean
+
   onStatusChange(newStatus:KjRowStatus):void
 }
 
@@ -76,7 +78,8 @@ export function KjRow(props:KjRowProps):JSX.Element
   // --- render vars
   const topCx:string=clsx("kj-row",{
     checked:props.sentenceState=="checked",
-    xed:props.sentenceState=="xed"
+    xed:props.sentenceState=="xed",
+    selected:props.selected
   });
 
   var checkButtonStatus:Button2State="normal";
