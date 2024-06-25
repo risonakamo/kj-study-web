@@ -28,7 +28,11 @@ function KjStudyIndex():JSX.Element
   /** if did initial shuffle after first data load */
   const didShuffle=useRef<boolean>(false);
 
+  /** name of datafile that is selected with the datafile dropdown */
   const [selectedDatafile,setSelectedDatafile]=useState<string>("");
+
+  /** index of the currently selected kj row, if any */
+  const [selectedRow,setSelectedRow]=useState<number|null>(null);
 
 
 
@@ -181,7 +185,7 @@ function KjStudyIndex():JSX.Element
   /** render the kj rows from the kj data list */
   function r_kjRows():JSX.Element[]
   {
-    return _.map(session.wordSentences,(data:WordSentencePair):JSX.Element=>{
+    return _.map(session.wordSentences,(data:WordSentencePair,i:number):JSX.Element=>{
       /** row's status changed. update the web-side state and send mqy to update the backend state */
       function h_statusChange(newStatus:KjRowStatus):void
       {
@@ -204,12 +208,20 @@ function KjStudyIndex():JSX.Element
         });
       }
 
+      /** clicked anywhere on this row. set it as the new selected row */
+      function h_rowClick():void
+      {
+        setSelectedRow(i);
+      }
+
       return <KjRow
         key={data.word+data.sentence}
         word={data.word}
         sentence={data.sentence}
         sentenceState={sentenceStatusToKjRowStatus(data.status)}
+        selected={i==selectedRow}
         onStatusChange={h_statusChange}
+        onClick={h_rowClick}
       />;
     });
   }

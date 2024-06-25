@@ -22,6 +22,7 @@ interface KjRowProps
   selected?:boolean
 
   onStatusChange(newStatus:KjRowStatus):void
+  onClick():void
 }
 
 /** main row element containing a sentence and all controls for interacting with the sentence */
@@ -100,7 +101,7 @@ export function KjRow(props:KjRowProps):JSX.Element
 
 
   // --- render
-  return <div className={topCx}>
+  return <div className={topCx} onClick={props.onClick}>
     <div className="sentence-contain">
       <div className="word">
         <span className="bubble">
