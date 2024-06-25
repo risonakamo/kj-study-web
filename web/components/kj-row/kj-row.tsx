@@ -2,6 +2,7 @@ import _ from "lodash";
 import {CheckIcon, CopyIcon, Flag, Forward, XIcon} from "lucide-react";
 import copy from "copy-to-clipboard";
 import clsx from "clsx";
+import React, {forwardRef, useImperativeHandle, useRef} from "react";
 
 import {splitSentenceOnWord} from "@/lib/sentence";
 import {Button1} from "@/components/button1/button1";
@@ -25,9 +26,41 @@ interface KjRowProps
   onClick():void
 }
 
-/** main row element containing a sentence and all controls for interacting with the sentence */
-export function KjRow(props:KjRowProps):JSX.Element
+export interface KjRowRef
 {
+  scrollTo():void
+}
+
+/** main row element containing a sentence and all controls for interacting with the sentence */
+export const KjRow=forwardRef(KjRow_inner);
+function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
+{
+  // --- refs
+  const topElement=useRef<HTMLDivElement>(null);
+
+
+
+  // --- component ref setup
+  useImperativeHandle(ref,():KjRowRef=>{
+    return {
+      scrollTo:scrollToMe
+    };
+  });
+
+
+
+  // --- funcs
+  /** scroll to this element */
+  function scrollToMe():void
+  {
+    topElement.current?.scrollIntoView({
+      block:"center"
+    });
+  }
+
+
+
+
   // --- handlers
   /** clicked on link sentence button. open jisho tab searching for the sentence */
   function h_linkSentenceClick():void
@@ -76,6 +109,7 @@ export function KjRow(props:KjRowProps):JSX.Element
   }
 
 
+
   // --- render vars
   const topCx:string=clsx("kj-row",{
     checked:props.sentenceState=="checked",
@@ -101,7 +135,7 @@ export function KjRow(props:KjRowProps):JSX.Element
 
 
   // --- render
-  return <div className={topCx} onClick={props.onClick}>
+  return <div className={topCx} onClick={props.onClick} ref={topElement}>
     <div className="sentence-contain">
       <div className="word">
         <span className="bubble">

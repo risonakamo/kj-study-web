@@ -6,7 +6,7 @@ import {useImmer}  from "use-immer";
 import {ArrowRight, RefreshCcw, ShuffleIcon} from "lucide-react";
 import NatCompare from "natural-compare";
 
-import {KjRow, KjRowStatus} from "@/components/kj-row/kj-row";
+import {KjRow, KjRowRef, KjRowStatus} from "@/components/kj-row/kj-row";
 import {apiSetSentenceState, apiShuffleSentences, getKjFiles, getKjSession,
   startNewSession} from "@/apis/kj-study";
 import {updateSentenceListStatus} from "@/lib/word-sentence";
@@ -34,6 +34,10 @@ function KjStudyIndex():JSX.Element
   /** index of the currently selected kj row, if any */
   const [selectedRow,setSelectedRow]=useState<number|null>(null);
 
+
+  // --- element refs
+  /** refs of all the currently rendered kj rows, in order */
+  const rowElements=useRef<KjRowRef[]>([]);
 
 
   // --- qys
@@ -161,7 +165,8 @@ function KjStudyIndex():JSX.Element
     console.log(e.key);
     console.log("selected",selectedRow);
 
-    // navigate selected row down, if there selected.
+    // navigate selected row down, if there selected. call scroll to on the element at that
+    // index position
     if (e.key=="ArrowDown")
     {
       e.preventDefault();
@@ -176,10 +181,11 @@ function KjStudyIndex():JSX.Element
         }
 
         setSelectedRow(newRow);
+        rowElements.current[newRow].scrollTo();
       }
     }
 
-    // navigate up
+    // navigate up. call scroll to on the element at that index position.
     else if (e.key=="ArrowUp")
     {
       e.preventDefault();
@@ -194,6 +200,7 @@ function KjStudyIndex():JSX.Element
         }
 
         setSelectedRow(newRow);
+        rowElements.current[newRow].scrollTo();
       }
     }
   }
@@ -240,6 +247,7 @@ function KjStudyIndex():JSX.Element
   /** render the kj rows from the kj data list */
   function r_kjRows():JSX.Element[]
   {
+    rowElements.current=[];
     return _.map(session.wordSentences,(data:WordSentencePair,i:number):JSX.Element=>{
       /** row's status changed. update the web-side state and send mqy to update the backend state */
       function h_statusChange(newStatus:KjRowStatus):void
@@ -269,6 +277,15 @@ function KjStudyIndex():JSX.Element
         setSelectedRow(i);
       }
 
+      /** collect refs */
+      function refCollect(ref:KjRowRef):void
+      {
+        if (ref)
+        {
+          rowElements.current.push(ref);
+        }
+      }
+
       return <KjRow
         key={data.word+data.sentence}
         word={data.word}
@@ -277,6 +294,7 @@ function KjStudyIndex():JSX.Element
         selected={i==selectedRow}
         onStatusChange={h_statusChange}
         onClick={h_rowClick}
+        ref={refCollect}
       />;
     });
   }
