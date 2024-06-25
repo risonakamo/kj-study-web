@@ -21,13 +21,14 @@ function KjStudyIndex():JSX.Element
   // --- states
   /** the current session */
   const [session,setSession]=useImmer<KjStudySession>({
-    wordSentences:[]
+    wordSentences:[],
+    datafile:""
   });
 
   /** if did initial shuffle after first data load */
   const didShuffle=useRef<boolean>(false);
 
-  const [selectedDatafile,setSelectedDatafile]=useState<string|undefined>(undefined);
+  const [selectedDatafile,setSelectedDatafile]=useState<string>("");
 
 
 
@@ -119,6 +120,16 @@ function KjStudyIndex():JSX.Element
     getSessionMqy.mutateAsync();
   },[]);
 
+  // on session change, if the selected datafile is empty and the session has a data file,
+  // set the selected data file to that data file.
+  // should not cause inf loop as setting it will prevent it from being called again
+  useEffect(()=>{
+    if (!selectedDatafile && session.datafile)
+    {
+      setSelectedDatafile(session.datafile);
+    }
+  },[session,selectedDatafile])
+
 
   // --- state setters
   /** set a session, but shuffle before doing so */
@@ -196,9 +207,13 @@ function KjStudyIndex():JSX.Element
   /** render the list of available data files */
   function r_datafilesList():JSX.Element[]
   {
-    return _.map(datafilesListQy.data,(datafileName:string)=>{
+    const elements:JSX.Element[]=_.map(datafilesListQy.data,(datafileName:string)=>{
       return <option key={datafileName} value={datafileName}>{datafileName}</option>;
     });
+
+    elements.push(<option value="" disabled hidden/>);
+
+    return elements;
   }
 
 
@@ -211,7 +226,9 @@ function KjStudyIndex():JSX.Element
           <Button1 icon={<RefreshCcw/>} text="Shuffle Session" onClick={h_shuffleSessionButton}/>
         </div>
         <div className="right">
-          <select className="data-selector" onChange={h_datafileSelectorChange} value={selectedDatafile}>
+          <select className="data-selector" onChange={h_datafileSelectorChange}
+            value={selectedDatafile}
+          >
             {r_datafilesList()}
           </select>
           <Button1 icon={<ArrowRight/>} text="Load Data" onClick={h_loadDatafileClick}/>

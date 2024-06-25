@@ -15,6 +15,9 @@ type WordSentenceDict=Record<string,string[]>
 interface KjStudySession
 {
     wordSentences:WordSentencePair[]
+
+    // might be empty
+    datafile:string
 }
 
 /** info about a sentence */
