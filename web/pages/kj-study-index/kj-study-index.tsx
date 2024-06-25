@@ -118,29 +118,84 @@ function KjStudyIndex():JSX.Element
 
 
 
-  // --- effects
+  // --- effects/sync
+  const sync=useRef({
+    keyControl,
+  });
+  sync.current.keyControl=keyControl;
+
   /** call initial session get */
   useEffect(()=>{
     getSessionMqy.mutateAsync();
   },[]);
 
-  // on session change, if the selected datafile is empty and the session has a data file,
-  // set the selected data file to that data file.
-  // should not cause inf loop as setting it will prevent it from being called again
+  /** on session change, if the selected datafile is empty and the session has a data file,
+      set the selected data file to that data file.
+      should not cause inf loop as setting it will prevent it from being called again */
   useEffect(()=>{
     if (!selectedDatafile && session.datafile)
     {
       setSelectedDatafile(session.datafile);
     }
-  },[session,selectedDatafile])
+  },[session,selectedDatafile]);
+
+  /** keyboard controls */
+  useEffect(()=>{
+    window.onkeydown=(e:KeyboardEvent)=>{
+      sync.current.keyControl(e);
+    };
+  },[]);
 
 
-  // --- state setters
+  // --- funcs
   /** set a session, but shuffle before doing so */
   function setSessionAndShuffle(newSession:KjStudySession):void
   {
     newSession.wordSentences=_.shuffle(newSession.wordSentences);
     setSession(newSession);
+  }
+
+  /** key controls func */
+  function keyControl(e:KeyboardEvent):void
+  {
+    console.log(e.key);
+    console.log("selected",selectedRow);
+
+    // navigate selected row down, if there selected.
+    if (e.key=="ArrowDown")
+    {
+      e.preventDefault();
+
+      if (selectedRow!=null)
+      {
+        var newRow:number=selectedRow+1;
+
+        if (newRow>=session.wordSentences.length)
+        {
+          newRow=session.wordSentences.length-1;
+        }
+
+        setSelectedRow(newRow);
+      }
+    }
+
+    // navigate up
+    else if (e.key=="ArrowUp")
+    {
+      e.preventDefault();
+
+      if (selectedRow!=null)
+      {
+        var newRow:number=selectedRow-1;
+
+        if (newRow<0)
+        {
+          newRow=0;
+        }
+
+        setSelectedRow(newRow);
+      }
+    }
   }
 
 
