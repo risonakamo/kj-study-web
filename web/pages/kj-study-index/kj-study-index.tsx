@@ -5,6 +5,7 @@ import {useEffect, useMemo, useRef, useState} from "react";
 import {useImmer}  from "use-immer";
 import {ArrowRight, RefreshCcw, ShuffleIcon} from "lucide-react";
 import NatCompare from "natural-compare";
+import copy from "copy-to-clipboard";
 
 import {KjRow, KjRowRef, KjRowStatus} from "@/components/kj-row/kj-row";
 import {apiSetSentenceState, apiShuffleSentences, getKjFiles, getKjSession,
@@ -227,7 +228,7 @@ function KjStudyIndex():JSX.Element
   {
     // navigate selected row down, if there selected. call scroll to on the element at that
     // index position
-    if (e.key=="ArrowDown")
+    if (e.key=="ArrowDown" || e.key=="s" || e.key=="S")
     {
       e.preventDefault();
 
@@ -246,7 +247,7 @@ function KjStudyIndex():JSX.Element
     }
 
     // navigate up. call scroll to on the element at that index position.
-    else if (e.key=="ArrowUp")
+    else if (e.key=="ArrowUp" || e.key=="w" || e.key=="W")
     {
       e.preventDefault();
 
@@ -264,17 +265,17 @@ function KjStudyIndex():JSX.Element
       }
     }
 
-    else if (e.key=="ArrowRight")
+    else if (e.key=="ArrowRight" || (e.ctrlKey && e.key=="Enter") || e.key=="d" || e.key=="D")
     {
       setStatusCurrentRow("active-red");
     }
 
-    else if (e.key=="ArrowLeft")
+    else if (e.key=="ArrowLeft" || e.key=="Enter" || e.key=="a" || e.key=="A")
     {
       setStatusCurrentRow("active-green");
     }
 
-    else if (e.key=="z" || e.key=="Z")
+    else if (e.key=="z" || e.key=="Z" || e.key=="," || e.key=="<")
     {
       if (!currentRow)
       {
@@ -284,7 +285,7 @@ function KjStudyIndex():JSX.Element
       searchForSentenceNewTab(currentRow.sentence);
     }
 
-    else if (e.key=="x" || e.key=="X")
+    else if (e.key=="x" || e.key=="X" || e.key=="." || e.key==">")
     {
       if (!currentRow)
       {
@@ -292,6 +293,18 @@ function KjStudyIndex():JSX.Element
       }
 
       searchForWordNewTab(currentRow.word);
+    }
+
+    else if (e.key==" " || (!e.ctrlKey && (e.key=="c" || e.key=="C")))
+    {
+      e.preventDefault();
+
+      if (!currentRow)
+      {
+        return;
+      }
+
+      copy(currentRow.sentence);
     }
   }
 
