@@ -6,7 +6,7 @@ import React, {forwardRef, useImperativeHandle, useRef} from "react";
 
 import {splitSentenceOnWord} from "@/lib/sentence";
 import {Button1} from "@/components/button1/button1";
-import {searchForSentenceUrl, searchForWordUrl} from "@/lib/jisho-url";
+import {searchForSentenceNewTab, searchForWordNewTab} from "@/lib/jisho-url";
 import {Button2, Button2State} from "@/components//button2/button2";
 
 import "./kj-row.styl";
@@ -65,13 +65,13 @@ function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
   /** clicked on link sentence button. open jisho tab searching for the sentence */
   function h_linkSentenceClick():void
   {
-    window.open(searchForSentenceUrl(props.sentence),"_blank");
+    searchForSentenceNewTab(props.sentence);
   }
 
   /** clicked link word button. open jisho tab searching for the word */
   function h_linkWordClick():void
   {
-    window.open(searchForWordUrl(props.word),"_blank");
+    searchForWordNewTab(props.word);
   }
 
   /** clicked copy all button. copy the sentence */

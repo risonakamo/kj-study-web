@@ -6,15 +6,27 @@ import {percentTruncate} from "./utils";
 const SentenceTruncatePercent:number=.5;
 
 /** return url to search for a target word */
-export function searchForWordUrl(word:string):string
+function searchForWordUrl(word:string):string
 {
     return `https://jisho.org/search/${word}`;
 }
 
 /** return url to search for sentence. automatically truncates the sentence to
  *  some percent of the size for consistency */
-export function searchForSentenceUrl(sentence:string):string
+function searchForSentenceUrl(sentence:string):string
 {
     sentence=percentTruncate(sentence,SentenceTruncatePercent);
     return `https://jisho.org/search/${sentence}%20%23sentence`;
+}
+
+/** open a new tab and search for target word */
+export function searchForWordNewTab(word:string):void
+{
+    window.open(searchForWordUrl(word),"_blank");
+}
+
+/** open a new tab and search for target sentence */
+export function searchForSentenceNewTab(sentence:string):void
+{
+    window.open(searchForSentenceUrl(sentence),"_blank");
 }

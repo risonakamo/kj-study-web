@@ -11,6 +11,7 @@ import {apiSetSentenceState, apiShuffleSentences, getKjFiles, getKjSession,
   startNewSession} from "@/apis/kj-study";
 import {updateSentenceListStatus} from "@/lib/word-sentence";
 import {Button1} from "@/components/button1/button1";
+import {searchForSentenceNewTab, searchForWordNewTab} from "@/lib/jisho-url";
 
 import "./kj-study-index.styl";
 
@@ -33,6 +34,18 @@ function KjStudyIndex():JSX.Element
 
   /** index of the currently selected kj row, if any */
   const [selectedRow,setSelectedRow]=useState<number|null>(null);
+
+
+  // --- dervied states
+  /** the current row as an obj */
+  const currentRow:WordSentencePair|null=useMemo(()=>{
+    if (selectedRow==null)
+    {
+      return null;
+    }
+
+    return session.wordSentences[selectedRow];
+  },[selectedRow,session.wordSentences]);
 
 
 
@@ -187,12 +200,10 @@ function KjStudyIndex():JSX.Element
    *  toggles to normal */
   function setStatusCurrentRow(newStatus:WordSentenceStatus):void
   {
-    if (selectedRow==null)
+    if (currentRow==null)
     {
       return;
     }
-
-    const currentRow:WordSentencePair=session.wordSentences[selectedRow];
 
     if (currentRow.status==newStatus)
     {
@@ -261,6 +272,26 @@ function KjStudyIndex():JSX.Element
     else if (e.key=="ArrowLeft")
     {
       setStatusCurrentRow("active-green");
+    }
+
+    else if (e.key=="z" || e.key=="Z")
+    {
+      if (!currentRow)
+      {
+        return;
+      }
+
+      searchForSentenceNewTab(currentRow.sentence);
+    }
+
+    else if (e.key=="x" || e.key=="X")
+    {
+      if (!currentRow)
+      {
+        return;
+      }
+
+      searchForWordNewTab(currentRow.word);
     }
   }
 
