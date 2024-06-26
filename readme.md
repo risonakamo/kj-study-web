@@ -6,3 +6,4 @@
 - <kbd>c</kbd>, <kbd>space</kbd>: copy current row
 - <kbd>Enter</kbd>: set row as checked
 - <kbd>ctrl</kbd><kbd>Enter</kbd>: set row as Xed
+- <kbd>r</kbd>: shuffle

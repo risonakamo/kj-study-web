@@ -79,7 +79,8 @@ function KjStudyIndex():JSX.Element
   });
 
   /** initial api call to get session. sets the session state after completion. shuffles the
-   *  words in the retrieved session, but only the first time this is called */
+   *  words in the retrieved session, but only the first time this is called.
+   *  resets selected row to 0. */
   const getSessionMqy=useMutation<KjStudySession>({
     mutationFn():Promise<KjStudySession>
     {
@@ -95,6 +96,7 @@ function KjStudyIndex():JSX.Element
       }
 
       setSession(data);
+      setSelectedRow(0);
     }
   });
 
@@ -110,7 +112,8 @@ function KjStudyIndex():JSX.Element
     }
   });
 
-  /** call to shuffle sentences. set the state on getting new sentences */
+  /** call to shuffle sentences. set the state on getting new sentences. resets selected
+   *  row to 0 */
   const shuffleSessionMqy=useMutation<KjStudySession>({
     mutationFn():Promise<KjStudySession>
     {
@@ -121,10 +124,11 @@ function KjStudyIndex():JSX.Element
     onSuccess(data:KjStudySession):void
     {
       setSessionAndShuffle(data);
+      setSelectedRow(0);
     }
   });
 
-  /** call to load new session. once get new session, set it and shuffle */
+  /** call to load new session. once get new session, set it and shuffle. reset selected row to 0 */
   const loadNewSessionMqy=useMutation<KjStudySession,Error,string>({
     mutationFn(targetDatafile:string):Promise<KjStudySession>
     {
@@ -135,6 +139,7 @@ function KjStudyIndex():JSX.Element
     onSuccess(data:KjStudySession):void
     {
       setSessionAndShuffle(data);
+      setSelectedRow(0);
     }
   });
 
@@ -216,6 +221,17 @@ function KjStudyIndex():JSX.Element
       currentRow.sentence,
       newStatus,
     );
+  }
+
+  /** do soft frontend sentence shuffle */
+  function shuffleSentences():void
+  {
+    setSession((draft)=>{
+      draft.wordSentences=_.shuffle(draft.wordSentences);
+    });
+
+    window.scrollTo(0,0);
+    setSelectedRow(0);
   }
 
 
@@ -306,6 +322,11 @@ function KjStudyIndex():JSX.Element
 
       copy(currentRow.sentence);
     }
+
+    else if (e.key=="r" || e.key=="R")
+    {
+      shuffleSentences();
+    }
   }
 
 
@@ -337,14 +358,10 @@ function KjStudyIndex():JSX.Element
     loadNewSessionMqy.mutateAsync(selectedDatafile);
   }
 
-  /** clicked shuffle button. shuffle the sentences and scroll to top */
+  /** clicked shuffle button. shuffle the sentences and scroll to top. reset selected row to 0 */
   function h_shuffleSentencesClick():void
   {
-    setSession((draft)=>{
-      draft.wordSentences=_.shuffle(draft.wordSentences);
-    });
-
-    window.scrollTo(0,0);
+    shuffleSentences();
   }
 
 
