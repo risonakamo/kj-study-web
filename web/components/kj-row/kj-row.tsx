@@ -2,7 +2,7 @@ import _ from "lodash";
 import {CheckIcon, CopyIcon, Flag, Forward, XIcon} from "lucide-react";
 import copy from "copy-to-clipboard";
 import clsx from "clsx";
-import React, {forwardRef, useImperativeHandle, useRef} from "react";
+import React, {forwardRef, useImperativeHandle, useRef, useState} from "react";
 
 import {splitSentenceOnWord} from "@/lib/sentence";
 import {Button1} from "@/components/button1/button1";
@@ -29,21 +29,28 @@ interface KjRowProps
 export interface KjRowRef
 {
   scrollTo():void
+  doCopy():void
 }
 
 /** main row element containing a sentence and all controls for interacting with the sentence */
 export const KjRow=forwardRef(KjRow_inner);
 function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
 {
+  // --- states
+  const [justCopied,setJustCopied]=useState<boolean>(false);
+
   // --- refs
   const topElement=useRef<HTMLDivElement>(null);
+
+  const justCopiedTimeout=useRef<number|null>(null);
 
 
 
   // --- component ref setup
   useImperativeHandle(ref,():KjRowRef=>{
     return {
-      scrollTo:scrollToMe
+      scrollTo:scrollToMe,
+      doCopy
     };
   });
 
@@ -56,6 +63,23 @@ function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
     topElement.current?.scrollIntoView({
       block:"center"
     });
+  }
+
+  /** copy this row's sentence and trigger appearance changes on the copy button */
+  function doCopy():void
+  {
+    copy(props.sentence);
+
+    setJustCopied(true);
+
+    if (justCopiedTimeout.current!=null)
+    {
+      clearTimeout(justCopiedTimeout.current);
+    }
+
+    justCopiedTimeout.current=setTimeout(()=>{
+      setJustCopied(false);
+    },2000);
   }
 
 
@@ -74,10 +98,11 @@ function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
     searchForWordNewTab(props.word);
   }
 
-  /** clicked copy all button. copy the sentence */
+  /** clicked copy all button. copy the sentence. set the copied state to true, and set timer
+   *  to reset the copied state */
   function h_copySentenceClick():void
   {
-    copy(props.sentence);
+    doCopy();
   }
 
   /** clicked check button. if already checked, set state to unchecked. otherwise, set to checked. */
@@ -132,6 +157,17 @@ function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
     checkButtonStatus="sub-active";
   }
 
+  var copyButtonText:string="Copy All";
+  var copyButtonIcon:JSX.Element=<CopyIcon/>;
+  var copyButtonClass:string="";
+
+  if (justCopied)
+  {
+    copyButtonText="Copied";
+    copyButtonIcon=<CheckIcon/>;
+    copyButtonClass="copied";
+  }
+
 
 
   // --- render
@@ -158,7 +194,8 @@ function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
       <div className="left">
         <Button1 icon={<Forward/>} text="Sentence" onClick={h_linkSentenceClick}/>
         <Button1 icon={<Forward/>} text="Word" onClick={h_linkWordClick}/>
-        <Button1 icon={<CopyIcon/>} text="Copy All" onClick={h_copySentenceClick}/>
+        <Button1 icon={copyButtonIcon} text={copyButtonText} onClick={h_copySentenceClick}
+          className={copyButtonClass}/>
       </div>
       <div className="right">
         <Button1 icon={<Flag/>} text="Sentence"/>

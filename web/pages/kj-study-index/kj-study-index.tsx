@@ -315,12 +315,12 @@ function KjStudyIndex():JSX.Element
     {
       e.preventDefault();
 
-      if (!currentRow)
+      if (selectedRow==null)
       {
         return;
       }
 
-      copy(currentRow.sentence);
+      rowElements.current[selectedRow].doCopy();
     }
 
     else if (e.key=="r" || e.key=="R")
