@@ -35,9 +35,13 @@ function KjStudyIndex():JSX.Element
   const [selectedRow,setSelectedRow]=useState<number|null>(null);
 
 
+
+
   // --- element refs
   /** refs of all the currently rendered kj rows, in order */
   const rowElements=useRef<KjRowRef[]>([]);
+
+
 
 
   // --- qys
@@ -159,12 +163,57 @@ function KjStudyIndex():JSX.Element
     setSession(newSession);
   }
 
+  /** update in the session a word/sentence with a new status. triggers backend call to update backend */
+  function updateSentence(word:string,sentence:string,newStatus:WordSentenceStatus):void
+  {
+    setSession((draft)=>{
+      updateSentenceListStatus(
+        draft.wordSentences,
+
+        word,
+        sentence,
+        newStatus,
+      )
+    });
+
+    updateSentenceStateMqy.mutateAsync({
+      word:word,
+      sentence:sentence,
+      status:newStatus
+    });
+  }
+
+  /** set the state of the currently selected row to some status. if the row is already the target status,
+   *  toggles to normal */
+  function setStatusCurrentRow(newStatus:WordSentenceStatus):void
+  {
+    if (selectedRow==null)
+    {
+      return;
+    }
+
+    const currentRow:WordSentencePair=session.wordSentences[selectedRow];
+
+    if (currentRow.status==newStatus)
+    {
+      newStatus="normal";
+    }
+
+    updateSentence(
+      currentRow.word,
+      currentRow.sentence,
+      newStatus,
+    );
+  }
+
+
+
+
+
+  // --- key control
   /** key controls func */
   function keyControl(e:KeyboardEvent):void
   {
-    console.log(e.key);
-    console.log("selected",selectedRow);
-
     // navigate selected row down, if there selected. call scroll to on the element at that
     // index position
     if (e.key=="ArrowDown")
@@ -203,7 +252,19 @@ function KjStudyIndex():JSX.Element
         rowElements.current[newRow].scrollTo();
       }
     }
+
+    else if (e.key=="ArrowRight")
+    {
+      setStatusCurrentRow("active-red");
+    }
+
+    else if (e.key=="ArrowLeft")
+    {
+      setStatusCurrentRow("active-green");
+    }
   }
+
+
 
 
 
@@ -243,6 +304,8 @@ function KjStudyIndex():JSX.Element
   }
 
 
+
+
   // --- render funcs
   /** render the kj rows from the kj data list */
   function r_kjRows():JSX.Element[]
@@ -254,21 +317,11 @@ function KjStudyIndex():JSX.Element
       {
         const newStatus2:WordSentenceStatus=kjRowStatusToSentenceStatus(newStatus);
 
-        setSession((draft)=>{
-          updateSentenceListStatus(
-            draft.wordSentences,
-
-            data.word,
-            data.sentence,
-            newStatus2,
-          )
-        });
-
-        updateSentenceStateMqy.mutateAsync({
-          word:data.word,
-          sentence:data.sentence,
-          status:newStatus2
-        });
+        updateSentence(
+          data.word,
+          data.sentence,
+          newStatus2,
+        );
       }
 
       /** clicked anywhere on this row. set it as the new selected row */
