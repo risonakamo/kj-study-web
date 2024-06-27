@@ -55,13 +55,31 @@
             .copied
                 color: #279330
 
+                // while top level is selected, darken
+                ~/.selected ^[1..-1]
+                    color: #2f6e34
+
     &.selected
         background: #0000000f
         outline: 2px solid #454c2e
 
+        .button1
+            &:hover
+                background-color: #e0e0e0
+
+            &:active
+                background-color: #dbdbdb
+
         &.xed
             outline-color: #492222
             background: #72383d59
+
+            .button1
+                &:hover
+                    background-color: #b88b8b
+
+                &:active
+                    background-color: #ad7c7c
 
         &.checked
             background: #5b725b45
@@ -70,6 +88,20 @@
         opacity: .6
         background: #89c18945
 
+        .button1
+            &:hover
+                background-color: #c0cdb7
+
+            &:active
+                background-color: #9bac8f
+
     &.xed
         opacity: .6
         background: #bf465040
+
+        .button1
+            &:hover
+                background-color: #b88b8b
+
+            &:active
+                background-color: #ad7c7c
