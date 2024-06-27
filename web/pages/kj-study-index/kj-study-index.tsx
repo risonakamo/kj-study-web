@@ -223,15 +223,43 @@ function KjStudyIndex():JSX.Element
     );
   }
 
-  /** do soft frontend sentence shuffle */
+  /** do soft frontend sentence shuffle. performs reset X to normal */
   function shuffleSentences():void
   {
+    resetXtoNormal();
+
     setSession((draft)=>{
       draft.wordSentences=_.shuffle(draft.wordSentences);
     });
 
     window.scrollTo(0,0);
     setSelectedRow(0);
+  }
+
+  /** checks if there are no more sentences in the normal state. if so, changes all sentences in the
+   *  X statee to normal state. does NOT send backend update for now, backend will keep it considered
+   *  as Xed */
+  function resetXtoNormal():void
+  {
+    const foundANormal:boolean=_.some(session.wordSentences,(sentence:WordSentencePair):boolean=>{
+      return sentence.status=="normal";
+    });
+
+    if (foundANormal)
+    {
+      return;
+    }
+
+    // did not find a normal. set all word sentences that are X to normal
+    setSession((draft)=>{
+      for (let i=0;i<draft.wordSentences.length;i++)
+      {
+        if (draft.wordSentences[i].status=="active-red")
+        {
+          draft.wordSentences[i].status="normal";
+        }
+      }
+    });
   }
 
 
