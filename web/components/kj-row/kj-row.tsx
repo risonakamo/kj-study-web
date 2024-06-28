@@ -23,7 +23,8 @@ interface KjRowProps
   selected?:boolean
 
   onStatusChange(newStatus:KjRowStatus):void
-  onClick():void
+  onClick?():void
+  onHover():void
 }
 
 export interface KjRowRef
@@ -177,7 +178,9 @@ function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
 
 
   // --- render
-  return <div className={topCx} onClick={props.onClick} ref={topElement}>
+  return <div className={topCx} onClick={props.onClick} ref={topElement}
+    onMouseEnter={props.onHover}
+  >
     <div className="sentence-contain">
       <div className="word">
         <span className="bubble">

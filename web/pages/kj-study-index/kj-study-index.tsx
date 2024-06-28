@@ -36,6 +36,9 @@ function KjStudyIndex():JSX.Element
   /** index of the currently selected kj row, if any */
   const [selectedRow,setSelectedRow]=useState<number|null>(null);
 
+  /** if true, visuals for keyboard selected items are shown */
+  const [keyboardVisuals,setkeyboardVisuals]=useState<boolean>(false);
+
 
   // --- dervied states
   /** the current row as an obj */
@@ -148,8 +151,10 @@ function KjStudyIndex():JSX.Element
   // --- effects/sync
   const sync=useRef({
     keyControl,
+    h_mouseMoved
   });
   sync.current.keyControl=keyControl;
+  sync.current.h_mouseMoved=h_mouseMoved;
 
   /** call initial session get */
   useEffect(()=>{
@@ -170,6 +175,13 @@ function KjStudyIndex():JSX.Element
   useEffect(()=>{
     window.onkeydown=(e:KeyboardEvent)=>{
       sync.current.keyControl(e);
+    };
+  },[]);
+
+  /** attach mouse move handler */
+  useEffect(()=>{
+    window.onmousemove=()=>{
+      sync.current.h_mouseMoved();
     };
   },[]);
 
@@ -270,6 +282,10 @@ function KjStudyIndex():JSX.Element
   /** key controls func */
   function keyControl(e:KeyboardEvent):void
   {
+    // when any key pressed, detect if it is handled by one of the key handlers.
+    // if it was, then trigger some logic at the end.
+    var validKeyPressed:boolean=true;
+
     // navigate selected row down, if there selected. call scroll to on the element at that
     // index position
     if (e.key=="ArrowDown" || e.key=="s" || e.key=="S")
@@ -372,6 +388,17 @@ function KjStudyIndex():JSX.Element
     {
       shuffleSentences();
     }
+
+    else
+    {
+      validKeyPressed=false;
+    }
+
+    // if pressed a valid key, enable keyboard visuals
+    if (validKeyPressed)
+    {
+      setkeyboardVisuals(true);
+    }
   }
 
 
@@ -409,6 +436,15 @@ function KjStudyIndex():JSX.Element
     shuffleSentences();
   }
 
+  /** on mouse moving, set keyboard visuals to false if it is on */
+  function h_mouseMoved():void
+  {
+    if (keyboardVisuals)
+    {
+      setkeyboardVisuals(false);
+    }
+  }
+
 
 
 
@@ -430,9 +466,14 @@ function KjStudyIndex():JSX.Element
         );
       }
 
-      /** clicked anywhere on this row. set it as the new selected row */
-      function h_rowClick():void
+      /** hovered over a row. set it as the selected row, but only if keyboard visuals is off */
+      function h_rowHover():void
       {
+        if (keyboardVisuals)
+        {
+          return;
+        }
+
         setSelectedRow(i);
       }
 
@@ -445,14 +486,17 @@ function KjStudyIndex():JSX.Element
         }
       }
 
+      // set row to selected only if keyboard visuals is on and it is selected
+      const selected:boolean=keyboardVisuals && i==selectedRow;
+
       return <KjRow
         key={data.word+data.sentence}
         word={data.word}
         sentence={data.sentence}
         sentenceState={sentenceStatusToKjRowStatus(data.status)}
-        selected={i==selectedRow}
+        selected={selected}
         onStatusChange={h_statusChange}
-        onClick={h_rowClick}
+        onHover={h_rowHover}
         ref={refCollect}
       />;
     });
