@@ -309,17 +309,20 @@ function KjStudyIndex():JSX.Element
       }
     }
 
+    // set item as red
     else if (e.key=="ArrowRight" || (e.ctrlKey && e.key=="Enter") || e.key=="d" || e.key=="D")
     {
       setStatusCurrentRow("active-red");
     }
 
+    // set item as green
     else if (e.key=="ArrowLeft" || e.key=="Enter" || e.key=="a" || e.key=="A")
     {
       setStatusCurrentRow("active-green");
     }
 
-    else if (e.key=="z" || e.key=="Z" || e.key=="," || e.key=="<")
+    // sentence search for current row
+    else if (e.key=="z" || e.key=="Z" || e.key==",")
     {
       if (!currentRow)
       {
@@ -329,7 +332,8 @@ function KjStudyIndex():JSX.Element
       searchForSentenceNewTab(currentRow.sentence);
     }
 
-    else if (e.key=="x" || e.key=="X" || e.key=="." || e.key==">")
+    // word search current row
+    else if (e.key=="x" || e.key=="X" || e.key==".")
     {
       if (!currentRow)
       {
@@ -339,7 +343,19 @@ function KjStudyIndex():JSX.Element
       searchForWordNewTab(currentRow.word);
     }
 
-    else if (e.key==" " || (!e.ctrlKey && (e.key=="c" || e.key=="C")))
+    // sentence pieces search current row
+    else if ((!e.ctrlKey && (e.key=="c" || e.key=="C")) || e.key=="/")
+    {
+      if (!currentRow)
+      {
+        return;
+      }
+
+      searchForWordNewTab(currentRow.sentence);
+    }
+
+    // copy current row
+    else if (e.key==" " || e.key=="v" || e.key=="V")
     {
       e.preventDefault();
 
@@ -351,6 +367,7 @@ function KjStudyIndex():JSX.Element
       rowElements.current[selectedRow].doCopy();
     }
 
+    // soft shuffle
     else if (e.key=="r" || e.key=="R")
     {
       shuffleSentences();

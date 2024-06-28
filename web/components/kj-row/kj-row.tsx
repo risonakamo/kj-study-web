@@ -98,6 +98,12 @@ function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
     searchForWordNewTab(props.word);
   }
 
+  /** clicked link all button. open jisho tab searching for sentence in pieces mode */
+  function h_linkAllClick():void
+  {
+    searchForWordNewTab(props.sentence);
+  }
+
   /** clicked copy all button. copy the sentence. set the copied state to true, and set timer
    *  to reset the copied state */
   function h_copySentenceClick():void
@@ -194,6 +200,7 @@ function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
       <div className="left">
         <Button1 icon={<Forward/>} text="Sentence" onClick={h_linkSentenceClick}/>
         <Button1 icon={<Forward/>} text="Word" onClick={h_linkWordClick}/>
+        <Button1 icon={<Forward/>} text="All" onClick={h_linkAllClick}/>
         <Button1 icon={copyButtonIcon} text={copyButtonText} onClick={h_copySentenceClick}
           className={copyButtonClass}/>
       </div>

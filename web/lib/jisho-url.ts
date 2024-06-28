@@ -5,7 +5,8 @@ import {percentTruncate} from "./utils";
 /** percent to truncate sentence when searching. adjust if failing alot */
 const SentenceTruncatePercent:number=.5;
 
-/** return url to search for a target word */
+/** return url to search for a target word. also works to search for full sentence in
+ *  pieces mode */
 function searchForWordUrl(word:string):string
 {
     return `https://jisho.org/search/${word}`;
@@ -19,7 +20,7 @@ function searchForSentenceUrl(sentence:string):string
     return `https://jisho.org/search/${sentence}%20%23sentence`;
 }
 
-/** open a new tab and search for target word */
+/** open a new tab and search for target word or sentence in pieces mode*/
 export function searchForWordNewTab(word:string):void
 {
     window.open(searchForWordUrl(word),"_blank");
