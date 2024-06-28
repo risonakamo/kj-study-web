@@ -54,9 +54,12 @@ function KjStudyIndex():JSX.Element
 
 
 
-  // --- element refs
+  // --- refs
   /** refs of all the currently rendered kj rows, in order */
   const rowElements=useRef<KjRowRef[]>([]);
+
+  /** when set, nullifys 1 instance of row hover operation */
+  const nullifyHover=useRef<boolean>(false);
 
 
 
@@ -301,6 +304,7 @@ function KjStudyIndex():JSX.Element
           newRow=session.wordSentences.length-1;
         }
 
+        nullifyHover.current=true;
         setSelectedRow(newRow);
         rowElements.current[newRow].scrollTo();
       }
@@ -320,6 +324,7 @@ function KjStudyIndex():JSX.Element
           newRow=0;
         }
 
+        nullifyHover.current=true;
         setSelectedRow(newRow);
         rowElements.current[newRow].scrollTo();
       }
@@ -466,9 +471,17 @@ function KjStudyIndex():JSX.Element
         );
       }
 
-      /** hovered over a row. set it as the selected row, but only if keyboard visuals is off */
+      /** hovered over a row. set it as the selected row, but only if keyboard visuals is off.
+       *  also triggers on clicking the row */
       function h_rowHover():void
       {
+        // nullify hover prevents hover from activating once
+        if (nullifyHover.current)
+        {
+          nullifyHover.current=false;
+          return;
+        }
+
         if (keyboardVisuals)
         {
           return;
@@ -497,6 +510,7 @@ function KjStudyIndex():JSX.Element
         selected={selected}
         onStatusChange={h_statusChange}
         onHover={h_rowHover}
+        onClick={h_rowHover}
         ref={refCollect}
       />;
     });
