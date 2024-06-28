@@ -306,6 +306,10 @@ function KjStudyIndex():JSX.Element
 
         nullifyHover.current=true;
         setSelectedRow(newRow);
+
+        console.log(rowElements.current);
+        console.log(newRow);
+
         rowElements.current[newRow].scrollTo();
       }
     }
@@ -323,6 +327,9 @@ function KjStudyIndex():JSX.Element
         {
           newRow=0;
         }
+
+        console.log(rowElements.current);
+        console.log(newRow);
 
         nullifyHover.current=true;
         setSelectedRow(newRow);
