@@ -498,6 +498,13 @@ function KjStudyIndex():JSX.Element
         setSelectedRow(i);
       }
 
+      /** clicking always sets the selected row and remove keyboard visuals */
+      function h_rowClick():void
+      {
+        setkeyboardVisuals(false);
+        setSelectedRow(i);
+      }
+
       /** collect refs */
       function refCollect(ref:KjRowRef):void
       {
@@ -519,7 +526,7 @@ function KjStudyIndex():JSX.Element
         selected={selected}
         onStatusChange={h_statusChange}
         onHover={h_rowHover}
-        onClick={h_rowHover}
+        onClick={h_rowClick}
         ref={refCollect}
       />;
     });
