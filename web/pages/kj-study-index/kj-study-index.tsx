@@ -339,14 +339,17 @@ function KjStudyIndex():JSX.Element
     }
 
     // set item as red
-    else if (e.key=="ArrowRight" || (e.ctrlKey && e.key=="Enter") || e.key=="d" || e.key=="D")
+    else if (e.key=="ArrowRight" || (e.ctrlKey && e.key=="Enter") || e.key=="d" || e.key=="D"
+      || (e.ctrlKey && e.key==" "))
     {
+      e.preventDefault();
       setStatusCurrentRow("active-red");
     }
 
     // set item as green
-    else if (e.key=="ArrowLeft" || e.key=="Enter" || e.key=="a" || e.key=="A")
+    else if (e.key=="ArrowLeft" || e.key=="Enter" || e.key=="a" || e.key=="A" || e.key==" ")
     {
+      e.preventDefault();
       setStatusCurrentRow("active-green");
     }
 
@@ -384,7 +387,7 @@ function KjStudyIndex():JSX.Element
     }
 
     // copy current row
-    else if (e.key==" " || e.key=="v" || e.key=="V")
+    else if (e.key=="v" || e.key=="V")
     {
       e.preventDefault();
 

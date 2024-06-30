@@ -164,7 +164,7 @@ function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
     checkButtonStatus="sub-active";
   }
 
-  var copyButtonText:string="Copy All";
+  var copyButtonText:string="Copy";
   var copyButtonIcon:JSX.Element=<CopyIcon/>;
   var copyButtonClass:string="";
 
