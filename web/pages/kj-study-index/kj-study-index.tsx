@@ -277,6 +277,32 @@ function KjStudyIndex():JSX.Element
     });
   }
 
+  /** try to navigate the current row */
+  function navigateRow(rowChange:number):void
+  {
+    if (selectedRow==null)
+    {
+      return;
+    }
+
+    var newRow:number=selectedRow+rowChange;
+    newRow=_.clamp(newRow,0,session.wordSentences.length-1);
+
+    if (newRow==selectedRow)
+    {
+      return;
+    }
+
+    nullifyHover.current=true;
+
+    if (rowElements.current && rowElements.current[newRow])
+    {
+      rowElements.current[newRow].scrollTo();
+    }
+
+    setSelectedRow(newRow);
+  }
+
 
 
 
@@ -295,23 +321,7 @@ function KjStudyIndex():JSX.Element
     {
       e.preventDefault();
 
-      if (selectedRow!=null)
-      {
-        var newRow:number=selectedRow+1;
-
-        if (newRow>=session.wordSentences.length)
-        {
-          newRow=session.wordSentences.length-1;
-        }
-
-        nullifyHover.current=true;
-        setSelectedRow(newRow);
-
-        console.log(rowElements.current);
-        console.log(newRow);
-
-        rowElements.current[newRow].scrollTo();
-      }
+      navigateRow(1);
     }
 
     // navigate up. call scroll to on the element at that index position.
@@ -319,22 +329,7 @@ function KjStudyIndex():JSX.Element
     {
       e.preventDefault();
 
-      if (selectedRow!=null)
-      {
-        var newRow:number=selectedRow-1;
-
-        if (newRow<0)
-        {
-          newRow=0;
-        }
-
-        console.log(rowElements.current);
-        console.log(newRow);
-
-        nullifyHover.current=true;
-        setSelectedRow(newRow);
-        rowElements.current[newRow].scrollTo();
-      }
+      navigateRow(-1);
     }
 
     // set item as red
@@ -505,6 +500,7 @@ function KjStudyIndex():JSX.Element
           rowElements.current.push(ref);
         }
       }
+
 
       // set row to selected only if keyboard visuals is on and it is selected
       const selected:boolean=keyboardVisuals && i==selectedRow;
