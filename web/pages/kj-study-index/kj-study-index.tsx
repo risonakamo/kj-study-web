@@ -321,7 +321,10 @@ function KjStudyIndex():JSX.Element
     {
       e.preventDefault();
 
-      navigateRow(1);
+      if (keyboardVisuals)
+      {
+        navigateRow(1);
+      }
     }
 
     // navigate up. call scroll to on the element at that index position.
@@ -329,7 +332,10 @@ function KjStudyIndex():JSX.Element
     {
       e.preventDefault();
 
-      navigateRow(-1);
+      if (keyboardVisuals)
+      {
+        navigateRow(-1);
+      }
     }
 
     // set item as red
