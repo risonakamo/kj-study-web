@@ -575,6 +575,9 @@ function KjStudyIndex():JSX.Element
         <Button1 icon={<ShuffleIcon/>} text="Shuffle" onClick={h_shuffleSentencesClick}/>
       </div>
     </div>
+    <div className="frame-zone">
+      <iframe src="https://jisho.org/search/%E5%9B%9E%E3%82%8A%E9%81%93"/>
+    </div>
   </>;
 }
 
