@@ -5,7 +5,7 @@ import {useEffect, useMemo, useRef, useState} from "react";
 import {useImmer}  from "use-immer";
 import {ArrowRight, RefreshCcw, ShuffleIcon} from "lucide-react";
 import NatCompare from "natural-compare";
-import copy from "copy-to-clipboard";
+import {clsx} from "clsx";
 
 import {KjRow, KjRowRef, KjRowStatus} from "@/components/kj-row/kj-row";
 import {apiSetSentenceState, apiShuffleSentences, getKjFiles, getKjSession,
@@ -42,6 +42,9 @@ function KjStudyIndex():JSX.Element
 
   /** current url of the jisho window */
   const [jishoIframeUrl,setJishoIframeUrl]=useState<string|undefined>();
+
+  /** iframe enabled or not */
+  const [iframeEnabled,setIframeEnabled]=useState<boolean>(true);
 
 
   // --- dervied states
@@ -571,36 +574,51 @@ function KjStudyIndex():JSX.Element
   }
 
 
+  // --- render vars
+  // iframe is showing or not. needs the iframe mode to be enabled, and for there to be
+  // an iframe url
+  const iframeMode:boolean=iframeEnabled && !!jishoIframeUrl;
+
+  const containerCx=clsx("contain",{
+    expanded:!iframeMode
+  });
+
 
   // --- render
   return <>
-    <div className="contain" ref={rowsContainerRef}>
-      <div className="top">
-        <div className="left">
-          <Button1 icon={<RefreshCcw/>} text="Reset Session" onClick={h_shuffleSessionButton}/>
+    <div className={containerCx} ref={rowsContainerRef}>
+      <div className="inner-contain">
+        <div className="top">
+          <div className="left">
+            <Button1 icon={<RefreshCcw/>} text="Reset Session" onClick={h_shuffleSessionButton}/>
+            <Button1 icon={<ShuffleIcon/>} text="Shuffle" onClick={h_shuffleSentencesClick}/>
+          </div>
+          <div className="right">
+            <select className="data-selector" onChange={h_datafileSelectorChange}
+              value={selectedDatafile}
+            >
+              {r_datafilesList()}
+            </select>
+            <Button1 icon={<ArrowRight/>} text="Load Data" onClick={h_loadDatafileClick}/>
+          </div>
+        </div>
+
+        <div className="kj-rows">
+          {r_kjRows()}
+        </div>
+
+        <div className="bottom">
           <Button1 icon={<ShuffleIcon/>} text="Shuffle" onClick={h_shuffleSentencesClick}/>
         </div>
-        <div className="right">
-          <select className="data-selector" onChange={h_datafileSelectorChange}
-            value={selectedDatafile}
-          >
-            {r_datafilesList()}
-          </select>
-          <Button1 icon={<ArrowRight/>} text="Load Data" onClick={h_loadDatafileClick}/>
-        </div>
-      </div>
-
-      <div className="kj-rows">
-        {r_kjRows()}
-      </div>
-
-      <div className="bottom">
-        <Button1 icon={<ShuffleIcon/>} text="Shuffle" onClick={h_shuffleSentencesClick}/>
       </div>
     </div>
-    <div className="frame-zone">
-      <iframe src={jishoIframeUrl}/>
-    </div>
+
+    {
+      iframeMode &&
+      <div className="frame-zone">
+        <iframe src={jishoIframeUrl}/>
+      </div>
+    }
   </>;
 }
 
