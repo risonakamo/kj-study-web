@@ -3,7 +3,7 @@ import {QueryClient,QueryClientProvider, useMutation, useQuery} from "@tanstack/
 import _ from "lodash";
 import {useEffect, useMemo, useRef, useState} from "react";
 import {useImmer}  from "use-immer";
-import {ArrowRight, RefreshCcw, ShuffleIcon} from "lucide-react";
+import {ArrowRight, Columns2, RefreshCcw, ShuffleIcon} from "lucide-react";
 import NatCompare from "natural-compare";
 import {clsx} from "clsx";
 
@@ -199,6 +199,8 @@ function KjStudyIndex():JSX.Element
   },[]);
 
 
+
+
   // --- funcs
   /** set a session, but shuffle before doing so */
   function setSessionAndShuffle(newSession:KjStudySession):void
@@ -313,6 +315,36 @@ function KjStudyIndex():JSX.Element
     setSelectedRow(newRow);
   }
 
+  /** do word or all-sentence search. either opens in new tab, or opens in iframe,
+   *  based on current iframe mode */
+  function doSearchWord(word:string):void
+  {
+    if (iframeEnabled)
+    {
+      setJishoIframeUrl(searchForWordUrl(word));
+    }
+
+    else
+    {
+      searchForWordNewTab(word);
+    }
+  }
+
+  /** do sentence search. either opens in new tab, or opens in iframe,
+   *  based on current iframe mode */
+  function doSentenceSearch(sentence:string):void
+  {
+    if (iframeEnabled)
+    {
+      setJishoIframeUrl(searchForSentenceUrl(sentence));
+    }
+
+    else
+    {
+      searchForSentenceNewTab(sentence);
+    }
+  }
+
 
 
 
@@ -371,7 +403,7 @@ function KjStudyIndex():JSX.Element
         return;
       }
 
-      setJishoIframeUrl(searchForSentenceUrl(currentRow.sentence));
+      doSentenceSearch(currentRow.sentence);
     }
 
     // word search current row
@@ -382,7 +414,7 @@ function KjStudyIndex():JSX.Element
         return;
       }
 
-      setJishoIframeUrl(searchForWordUrl(currentRow.word));
+      doSearchWord(currentRow.word);
     }
 
     // sentence pieces search current row
@@ -393,7 +425,7 @@ function KjStudyIndex():JSX.Element
         return;
       }
 
-      setJishoIframeUrl(searchForWordUrl(currentRow.sentence));
+      doSearchWord(currentRow.sentence);
     }
 
     // copy current row
@@ -475,14 +507,20 @@ function KjStudyIndex():JSX.Element
    *  setting the iframe's url */
   function h_rowWordSearch(word:string):void
   {
-    setJishoIframeUrl(searchForWordUrl(word));
+    doSearchWord(word);
   }
 
   /** a kj row requested sentence search. trigger the search by
    *  setting the iframe's url */
   function h_rowSentenceSearch(sentence:string):void
   {
-    setJishoIframeUrl(searchForSentenceUrl(sentence));
+    doSentenceSearch(sentence);
+  }
+
+  /** clicked toggle iframe mode button. toggle the iframe mode */
+  function h_iframeToggleButtonClick():void
+  {
+    setIframeEnabled(!iframeEnabled);
   }
 
 
@@ -583,23 +621,35 @@ function KjStudyIndex():JSX.Element
     expanded:!iframeMode
   });
 
+  var iframeText:string="Jisho Panel: On";
+
+  if (!iframeEnabled)
+  {
+    iframeText="Jisho Panel: Off";
+  }
+
 
   // --- render
   return <>
     <div className={containerCx} ref={rowsContainerRef}>
       <div className="inner-contain">
         <div className="top">
-          <div className="left">
-            <Button1 icon={<RefreshCcw/>} text="Reset Session" onClick={h_shuffleSessionButton}/>
-            <Button1 icon={<ShuffleIcon/>} text="Shuffle" onClick={h_shuffleSentencesClick}/>
+          <div className="row1">
+            <div className="left">
+              <Button1 icon={<RefreshCcw/>} text="Reset Session" onClick={h_shuffleSessionButton}/>
+              <Button1 icon={<ShuffleIcon/>} text="Shuffle" onClick={h_shuffleSentencesClick}/>
+            </div>
+            <div className="right">
+              <select className="data-selector" onChange={h_datafileSelectorChange}
+                value={selectedDatafile}
+              >
+                {r_datafilesList()}
+              </select>
+              <Button1 icon={<ArrowRight/>} text="Load Data" onClick={h_loadDatafileClick}/>
+            </div>
           </div>
-          <div className="right">
-            <select className="data-selector" onChange={h_datafileSelectorChange}
-              value={selectedDatafile}
-            >
-              {r_datafilesList()}
-            </select>
-            <Button1 icon={<ArrowRight/>} text="Load Data" onClick={h_loadDatafileClick}/>
+          <div className="row2">
+            <Button1 icon={<Columns2/>} text={iframeText} onClick={h_iframeToggleButtonClick}/>
           </div>
         </div>
 
