@@ -12,7 +12,8 @@ import {apiSetSentenceState, apiShuffleSentences, getKjFiles, getKjSession,
   startNewSession} from "@/apis/kj-study";
 import {updateSentenceListStatus} from "@/lib/word-sentence";
 import {Button1} from "@/components/button1/button1";
-import {searchForSentenceNewTab, searchForWordNewTab} from "@/lib/jisho-url";
+import {searchForSentenceNewTab, searchForSentenceUrl, searchForWordNewTab,
+  searchForWordUrl} from "@/lib/jisho-url";
 
 import "./kj-study-index.styl";
 
@@ -38,6 +39,9 @@ function KjStudyIndex():JSX.Element
 
   /** if true, visuals for keyboard selected items are shown */
   const [keyboardVisuals,setkeyboardVisuals]=useState<boolean>(false);
+
+  /** current url of the jisho window */
+  const [jishoIframeUrl,setJishoIframeUrl]=useState<string|undefined>();
 
 
   // --- dervied states
@@ -364,7 +368,7 @@ function KjStudyIndex():JSX.Element
         return;
       }
 
-      searchForSentenceNewTab(currentRow.sentence);
+      setJishoIframeUrl(searchForSentenceUrl(currentRow.sentence));
     }
 
     // word search current row
@@ -375,7 +379,7 @@ function KjStudyIndex():JSX.Element
         return;
       }
 
-      searchForWordNewTab(currentRow.word);
+      setJishoIframeUrl(searchForWordUrl(currentRow.word));
     }
 
     // sentence pieces search current row
@@ -386,7 +390,7 @@ function KjStudyIndex():JSX.Element
         return;
       }
 
-      searchForWordNewTab(currentRow.sentence);
+      setJishoIframeUrl(searchForWordUrl(currentRow.sentence));
     }
 
     // copy current row
@@ -464,6 +468,20 @@ function KjStudyIndex():JSX.Element
     }
   }
 
+  /** a kj row requested word or all-sentence search. trigger the search by
+   *  setting the iframe's url */
+  function h_rowWordSearch(word:string):void
+  {
+    setJishoIframeUrl(searchForWordUrl(word));
+  }
+
+  /** a kj row requested sentence search. trigger the search by
+   *  setting the iframe's url */
+  function h_rowSentenceSearch(sentence:string):void
+  {
+    setJishoIframeUrl(searchForSentenceUrl(sentence));
+  }
+
 
 
 
@@ -534,6 +552,8 @@ function KjStudyIndex():JSX.Element
         onHover={h_rowHover}
         onClick={h_rowClick}
         ref={refCollect}
+        onWordSearch={h_rowWordSearch}
+        onSentenceSearch={h_rowSentenceSearch}
       />;
     });
   }
@@ -579,7 +599,7 @@ function KjStudyIndex():JSX.Element
       </div>
     </div>
     <div className="frame-zone">
-      <iframe src="https://jisho.org/search/%E5%9B%9E%E3%82%8A%E9%81%93"/>
+      <iframe src={jishoIframeUrl}/>
     </div>
   </>;
 }

@@ -25,6 +25,11 @@ interface KjRowProps
   onStatusChange(newStatus:KjRowStatus):void
   onClick?():void
   onHover():void
+
+  // requesting to perform word search. might provide a sentence instead of a word
+  onWordSearch(word:string):void
+  // requesting to perform sentence search
+  onSentenceSearch(sentence:string):void
 }
 
 export interface KjRowRef
@@ -90,19 +95,19 @@ function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
   /** clicked on link sentence button. open jisho tab searching for the sentence */
   function h_linkSentenceClick():void
   {
-    searchForSentenceNewTab(props.sentence);
+    props.onSentenceSearch(props.sentence);
   }
 
   /** clicked link word button. open jisho tab searching for the word */
   function h_linkWordClick():void
   {
-    searchForWordNewTab(props.word);
+    props.onWordSearch(props.word);
   }
 
   /** clicked link all button. open jisho tab searching for sentence in pieces mode */
   function h_linkAllClick():void
   {
-    searchForWordNewTab(props.sentence);
+    props.onWordSearch(props.sentence);
   }
 
   /** clicked copy all button. copy the sentence. set the copied state to true, and set timer
