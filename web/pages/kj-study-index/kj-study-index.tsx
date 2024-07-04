@@ -56,10 +56,13 @@ function KjStudyIndex():JSX.Element
 
   // --- refs
   /** refs of all the currently rendered kj rows, in order */
-  const rowElements=useRef<KjRowRef[]>([]);
+  const rowElementsRefs=useRef<KjRowRef[]>([]);
 
   /** when set, nullifys 1 instance of row hover operation */
   const nullifyHover=useRef<boolean>(false);
+
+  /** container element of rows */
+  const rowsContainerRef=useRef<HTMLDivElement>(null);
 
 
 
@@ -247,7 +250,7 @@ function KjStudyIndex():JSX.Element
       draft.wordSentences=_.shuffle(draft.wordSentences);
     });
 
-    window.scrollTo(0,0);
+    rowsContainerRef.current?.scrollTo(0,0);
     setSelectedRow(0);
   }
 
@@ -295,9 +298,9 @@ function KjStudyIndex():JSX.Element
 
     nullifyHover.current=true;
 
-    if (rowElements.current && rowElements.current[newRow])
+    if (rowElementsRefs.current && rowElementsRefs.current[newRow])
     {
-      rowElements.current[newRow].scrollTo();
+      rowElementsRefs.current[newRow].scrollTo();
     }
 
     setSelectedRow(newRow);
@@ -396,7 +399,7 @@ function KjStudyIndex():JSX.Element
         return;
       }
 
-      rowElements.current[selectedRow].doCopy();
+      rowElementsRefs.current[selectedRow].doCopy();
     }
 
     // soft shuffle
@@ -468,7 +471,7 @@ function KjStudyIndex():JSX.Element
   /** render the kj rows from the kj data list */
   function r_kjRows():JSX.Element[]
   {
-    rowElements.current=[];
+    rowElementsRefs.current=[];
     return _.map(session.wordSentences,(data:WordSentencePair,i:number):JSX.Element=>{
       /** row's status changed. update the web-side state and send mqy to update the backend state */
       function h_statusChange(newStatus:KjRowStatus):void
@@ -513,7 +516,7 @@ function KjStudyIndex():JSX.Element
       {
         if (ref)
         {
-          rowElements.current.push(ref);
+          rowElementsRefs.current.push(ref);
         }
       }
 
@@ -551,7 +554,7 @@ function KjStudyIndex():JSX.Element
 
   // --- render
   return <>
-    <div className="contain">
+    <div className="contain" ref={rowsContainerRef}>
       <div className="top">
         <div className="left">
           <Button1 icon={<RefreshCcw/>} text="Reset Session" onClick={h_shuffleSessionButton}/>
