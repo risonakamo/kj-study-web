@@ -2,7 +2,7 @@
 ## Navigation/Setting
 - <kbd>↑</kbd>, <kbd>↓</kbd>, <kbd>w</kbd>, <kbd>s</kbd>: navigate rows
 - <kbd>←</kbd>, <kbd>→</kbd>, <kbd>a</kbd>, <kbd>d</kbd>: set row as checked or Xed
-- <kbd>Enter</kbd>, <kbd>space</kbd>: set row as checked
+- <kbd>enter</kbd>, <kbd>space</kbd>: set row as checked
 - <kbd>ctrl</kbd><kbd>Enter</kbd>, <kbd>ctrl</kbd><kbd>space</kbd>: set row as Xed
 
 ## Row Actions
