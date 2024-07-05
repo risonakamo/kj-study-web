@@ -71,6 +71,9 @@ function KjStudyIndex():JSX.Element
   /** container element of rows */
   const rowsContainerRef=useRef<HTMLDivElement>(null);
 
+  /** the jisho iframe element */
+  const jishoIframeRef=useRef<HTMLIFrameElement>(null);
+
 
 
 
@@ -535,6 +538,12 @@ function KjStudyIndex():JSX.Element
     setIframeEnabled(!iframeEnabled);
   }
 
+  /** on the jisho frame loading, call blur */
+  function h_iframeLoaded():void
+  {
+    jishoIframeRef.current?.blur();
+  }
+
 
 
 
@@ -678,7 +687,7 @@ function KjStudyIndex():JSX.Element
     {
       iframeMode &&
       <div className="frame-zone">
-        <iframe src={jishoIframeUrl}/>
+        <iframe src={jishoIframeUrl} onLoad={h_iframeLoaded} ref={jishoIframeRef}/>
       </div>
     }
   </>;
