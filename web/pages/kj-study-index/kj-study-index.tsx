@@ -353,9 +353,8 @@ function KjStudyIndex():JSX.Element
   /** key controls func */
   function keyControl(e:KeyboardEvent):void
   {
-    // when any key pressed, detect if it is handled by one of the key handlers.
-    // if it was, then trigger some logic at the end.
-    var validKeyPressed:boolean=true;
+    // if a key handler sets this, key visuals will be toggled on
+    var showKeyVisuals:boolean=false;
 
     // navigate selected row down, if there selected. call scroll to on the element at that
     // index position
@@ -367,6 +366,8 @@ function KjStudyIndex():JSX.Element
       {
         navigateRow(1);
       }
+
+      showKeyVisuals=true;
     }
 
     // navigate up. call scroll to on the element at that index position.
@@ -378,6 +379,8 @@ function KjStudyIndex():JSX.Element
       {
         navigateRow(-1);
       }
+
+      showKeyVisuals=true;
     }
 
     // set item as red
@@ -386,6 +389,7 @@ function KjStudyIndex():JSX.Element
     {
       e.preventDefault();
       setStatusCurrentRow("active-red");
+      showKeyVisuals=true;
     }
 
     // set item as green
@@ -393,6 +397,7 @@ function KjStudyIndex():JSX.Element
     {
       e.preventDefault();
       setStatusCurrentRow("active-green");
+      showKeyVisuals=true;
     }
 
     // sentence search for current row
@@ -447,13 +452,20 @@ function KjStudyIndex():JSX.Element
       shuffleSentences();
     }
 
-    else
+    // close jisho window
+    else if (e.key=="Escape")
     {
-      validKeyPressed=false;
+      setJishoIframeUrl(undefined);
+    }
+
+    // toggle iframe mode
+    else if (e.key=="i" || e.key=="I")
+    {
+      setIframeEnabled(!iframeEnabled);
     }
 
     // if pressed a valid key, enable keyboard visuals
-    if (validKeyPressed)
+    if (showKeyVisuals)
     {
       setkeyboardVisuals(true);
     }
