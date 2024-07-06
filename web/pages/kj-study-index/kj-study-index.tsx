@@ -544,6 +544,13 @@ function KjStudyIndex():JSX.Element
     jishoIframeRef.current?.blur();
   }
 
+  /** on mouse entering the rows container, focus it */
+  function h_mouseEnterRowsContain():void
+  {
+    jishoIframeRef.current?.blur();
+    rowsContainerRef.current?.focus();
+  }
+
 
 
 
@@ -652,7 +659,7 @@ function KjStudyIndex():JSX.Element
 
   // --- render
   return <>
-    <div className={containerCx} ref={rowsContainerRef}>
+    <div className={containerCx} ref={rowsContainerRef} onMouseEnter={h_mouseEnterRowsContain}>
       <div className="inner-contain">
         <div className="top">
           <div className="row1">
