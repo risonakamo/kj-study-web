@@ -12,14 +12,15 @@ main
     overflow: hidden
 
     .contain
-        width: 45%
-        min-width: 610px
+        width: 55%
+        min-width: 500px
         overflow: auto
         flex: 1
-        padding: 15px 10px 13px
+        padding: 15px 0 13px
 
         .top
             margin-bottom: 10px
+            padding: 0 10px
 
             .row1
                 display: flex
@@ -44,12 +45,16 @@ main
             padding: 0
 
             .inner-contain
-                width: 45%
-                min-width: 610px
+                width: 55%
+                min-width: 500px
                 margin: auto
-                padding: 15px 10px 13px
+                padding: 15px 0 13px
 
-        @media (max-width: 610px)
+                @media (max-width: 700px)
+                    width: 100%
+                    min-width: auto
+
+        @media (max-width: 700px)
             width: 100%
             min-width: auto
 
