@@ -9,7 +9,7 @@
 - <kbd>z</kbd>, <kbd>,</kbd>: search sentence of current row
 - <kbd>x</kbd>, <kbd>.</kbd>: search word of current row
 - <kbd>c</kbd>, <kbd>/</kbd>: search full sentence of current row
-- <kbd>v</kbd>: copy current row
+- <kbd>v</kbd>, <kbd>'</kbd>: copy current row
 
 ## Session
 - <kbd>r</kbd>: shuffle
