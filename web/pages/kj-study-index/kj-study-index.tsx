@@ -437,7 +437,7 @@ function KjStudyIndex():JSX.Element
     }
 
     // copy current row
-    else if (e.key=="v" || e.key=="V" || e.key=="'" || e.key=="\"")
+    else if (e.key=="v" || e.key=="V" || e.key=="'" || e.key=="\"" || e.key=="0")
     {
       e.preventDefault();
 
