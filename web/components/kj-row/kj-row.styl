@@ -1,5 +1,5 @@
 .kj-row
-    border-bottom: 1px solid black
+    border-bottom: 1px solid var(--lines-colour,black)
     padding: 15px 16px 16px
     font-family: "pretendard jp"
     font-weight: 400
@@ -17,6 +17,7 @@
                 background: black
                 border-radius: 20px
                 padding: 1.2px 11px 2px
+                border: 1px solid var(--lines-colour,transparent)
 
         .sentence
             span.highlighted
@@ -25,7 +26,7 @@
 
                 // while parent is checked or xed, darken the highlight
                 ~/.checked ^[1..-1], ~/.xed ^[1..-1]
-                    color: #607820
+                    color: var(--kanji-highlight,#607820)
 
     .state-control
         display: flex
@@ -53,20 +54,20 @@
             flex: 1
 
             .copied
-                color: #279330
+                color: var(--kanji-highlight,#279330)
 
                 // while top level is selected, darken
                 ~/.selected ^[1..-1]
                     color: #2f6e34
 
     &.selected
-        outline: 4px solid transparentify(#3a3a3a,65%)
+        outline: 4px solid var(--lines-colour,transparentify(#3a3a3a,65%))
 
         &.checked
-            outline-color: transparentify(#454c2e,65%)
+            outline-color: var(--lines-colour,transparentify(#454c2e,65%))
 
         &.xed
-            outline-color: transparentify(#492222,65%)
+            outline-color: var(--lines-colour,transparentify(#492222,65%))
 
     &.checked
         background: rgba(137 193 137 20%)

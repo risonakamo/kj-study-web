@@ -46,6 +46,8 @@ function KjStudyIndex():JSX.Element
   /** iframe enabled or not */
   const [iframeEnabled,setIframeEnabled]=useState<boolean>(true);
 
+  const [darkmode,setDarkmode]=useState<boolean>(false);
+
 
   // --- dervied states
   /** the current row as an obj */
