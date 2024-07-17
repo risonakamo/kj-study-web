@@ -3,7 +3,7 @@
 import axios from "axios";
 
 const ax=axios.create({
-    baseURL:`http://${window.location.hostname}:4200`,
+    baseURL:window.location.origin,
 });
 
 /** get kj files list */
