@@ -16,15 +16,15 @@
     &.active-green
         $bgColour=#b4c8c0a3
         $borderColour=#5f5f5f
-        background: $bgColour
-        border-color: $borderColour
+        background: var(--button2-green-bg,$bgColour)
+        border-color: var(--button2-green-border,$borderColour)
 
         &:hover
-            background: lighten($bgColour,20%)
+            background: var(--button2-green-hover-bg,lighten($bgColour,20%))
 
         &:active
             background: darken($bgColour,20%)
-            border-color: darken($borderColour,20%)
+            border-color: var(--button2-green-active-border,darken($borderColour,20%))
 
     &.active-red
         $bgColour=var(--button2-red-background,#e0a5a596)
@@ -42,13 +42,13 @@
 
     &.sub-active
         &:hover
-            background: #f5f5f585
+            background: var(--button2-subactive-hover-bg,#f5f5f585)
 
     &:hover
         background: var(--button2-neutral-hover,whitesmoke)
-        border-color: #777777
+        border-color: var(--button2-neutral-hover-border,#777777)
 
 
     &:active
         background: var(--button2-neutral-active,#dbdbdb)
-        border-color: #a9a9a9
+        border-color: var(--button2-neutral-active-border,#a9a9a9)
