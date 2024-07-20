@@ -3,7 +3,7 @@ import {QueryClient,QueryClientProvider, useMutation, useQuery} from "@tanstack/
 import _ from "lodash";
 import {useEffect, useMemo, useRef, useState} from "react";
 import {useImmer}  from "use-immer";
-import {ArrowRight, Columns2, RefreshCcw, ShuffleIcon} from "lucide-react";
+import {ArrowRight, Columns2, MoonStarIcon, RefreshCcw, ShuffleIcon, Sun, SunDimIcon, SunMoonIcon} from "lucide-react";
 import NatCompare from "natural-compare";
 import {clsx} from "clsx";
 
@@ -46,7 +46,8 @@ function KjStudyIndex():JSX.Element
   /** iframe enabled or not */
   const [iframeEnabled,setIframeEnabled]=useState<boolean>(true);
 
-  const [darkmode,setDarkmode]=useState<boolean>(false);
+  /** darkmode on or off */
+  const [darkmode,setDarkmode]=useState<boolean>(true);
 
 
   // --- dervied states
@@ -202,6 +203,19 @@ function KjStudyIndex():JSX.Element
       sync.current.h_mouseMoved();
     };
   },[]);
+
+  /** toggle class on body on darkmode state change */
+  useEffect(()=>{
+    if (darkmode)
+    {
+      document.body.classList.add("dark");
+    }
+
+    else
+    {
+      document.body.classList.remove("dark");
+    }
+  },[darkmode]);
 
 
 
@@ -553,6 +567,12 @@ function KjStudyIndex():JSX.Element
     rowsContainerRef.current?.focus();
   }
 
+  /** clicked darkmode toggle button. toggle dark mode state */
+  function h_darkModeClick():void
+  {
+    setDarkmode(!darkmode);
+  }
+
 
 
 
@@ -658,6 +678,16 @@ function KjStudyIndex():JSX.Element
     iframeText="Jisho Panel: Off";
   }
 
+  // dark mode vars
+  var darkModeIcon:JSX.Element=<Sun/>;
+  var darkModeText:string="Theme: Light";
+
+  if (darkmode)
+  {
+    darkModeIcon=<MoonStarIcon/>;
+    darkModeText="Theme: Dark";
+  }
+
 
   // --- render
   return <>
@@ -680,6 +710,7 @@ function KjStudyIndex():JSX.Element
           </div>
           <div className="row2">
             <Button1 icon={<Columns2/>} text={iframeText} onClick={h_iframeToggleButtonClick}/>
+            <Button1 icon={darkModeIcon} text={darkModeText} onClick={h_darkModeClick}/>
           </div>
         </div>
 
