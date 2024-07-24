@@ -61,13 +61,8 @@
                     color: #2f6e34
 
     &.selected
-        outline: 4px solid var(--lines-colour,transparentify(#3a3a3a,65%))
-
-        &.checked
-            outline-color: var(--lines-colour,transparentify(#454c2e,65%))
-
-        &.xed
-            outline-color: var(--lines-colour,transparentify(#492222,65%))
+        outline: 4px solid var(--selected-border,transparentify(#3a3a3a,65%))
+        outline-offset: -4px
 
     &.checked
         background: rgba(137 193 137 20%)
