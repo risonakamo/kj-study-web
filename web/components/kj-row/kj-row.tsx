@@ -20,6 +20,8 @@ interface KjRowProps
   word:string
   sentenceState:KjRowStatus
 
+  showSearchButtons:boolean
+
   selected?:boolean
 
   onStatusChange(newStatus:KjRowStatus):void
@@ -146,6 +148,22 @@ function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
   }
 
 
+  // --- render func
+  /** conditionally render the search buttons */
+  function r_searchButtons():JSX.Element
+  {
+    if (!props.showSearchButtons)
+    {
+      return <></>;
+    }
+
+    return <>
+      <Button1 icon={<Forward/>} text="Sentence" onClick={h_linkSentenceClick}/>
+      <Button1 icon={<Forward/>} text="Word" onClick={h_linkWordClick}/>
+      <Button1 icon={<Forward/>} text="All" onClick={h_linkAllClick}/>
+    </>;
+  }
+
 
   // --- render vars
   const topCx:string=clsx("kj-row",{
@@ -206,15 +224,13 @@ function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
 
     <div className="control">
       <div className="left">
-        <Button1 icon={<Forward/>} text="Sentence" onClick={h_linkSentenceClick}/>
-        <Button1 icon={<Forward/>} text="Word" onClick={h_linkWordClick}/>
-        <Button1 icon={<Forward/>} text="All" onClick={h_linkAllClick}/>
+        {r_searchButtons()}
         <Button1 icon={copyButtonIcon} text={copyButtonText} onClick={h_copySentenceClick}
           className={copyButtonClass}/>
       </div>
       <div className="right">
-        <Button1 icon={<Flag/>} text="Sentence"/>
-        <Button1 icon={<Flag/>} text="Word"/>
+        {/* <Button1 icon={<Flag/>} text="Sentence"/>
+        <Button1 icon={<Flag/>} text="Word"/> */}
       </div>
     </div>
   </div>;

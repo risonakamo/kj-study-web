@@ -375,7 +375,9 @@ function KjStudyIndex():JSX.Element
     // if a key handler sets this, key visuals will be toggled on
     var showKeyVisuals:boolean=false;
 
-    var mainActionKey:boolean=(
+    // if iframe is on, main action is to open "all" search. otherwise,
+    // does copy instead
+    const mainActionKey:boolean=(
       e.key==" "
       || e.key=="Enter"
       || e.key=="0"
@@ -461,7 +463,7 @@ function KjStudyIndex():JSX.Element
     // sentence pieces search current row
     else if (
       e.key=="z" || e.key=="Z"
-      || mainActionKey
+      || (mainActionKey && iframeEnabled)
     )
     {
       if (!currentRow)
@@ -473,7 +475,10 @@ function KjStudyIndex():JSX.Element
     }
 
     // copy current row
-    else if (e.key=="v" || e.key=="V")
+    else if (
+      e.key=="v" || e.key=="V"
+      || (mainActionKey && !iframeEnabled)
+    )
     {
       e.preventDefault();
 
@@ -665,6 +670,7 @@ function KjStudyIndex():JSX.Element
         ref={refCollect}
         onWordSearch={h_rowWordSearch}
         onSentenceSearch={h_rowSentenceSearch}
+        showSearchButtons={iframeEnabled}
       />;
     });
   }
