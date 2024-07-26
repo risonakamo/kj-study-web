@@ -375,6 +375,17 @@ function KjStudyIndex():JSX.Element
     // if a key handler sets this, key visuals will be toggled on
     var showKeyVisuals:boolean=false;
 
+    var mainActionKey:boolean=(
+      e.key==" "
+      || e.key=="Enter"
+      || e.key=="0"
+    );
+
+    if (mainActionKey)
+    {
+      e.preventDefault();
+    }
+
     // navigate selected row down, if there selected. call scroll to on the element at that
     // index position
     if (e.key=="ArrowDown" || e.key=="s" || e.key=="S")
@@ -403,8 +414,11 @@ function KjStudyIndex():JSX.Element
     }
 
     // set item as red
-    else if (e.key=="ArrowRight" || (e.ctrlKey && e.key=="Enter") || e.key=="d" || e.key=="D"
-      || (e.ctrlKey && e.key==" "))
+    else if (
+      e.key=="ArrowRight"
+      || e.key=="d"
+      || e.key=="D"
+    )
     {
       e.preventDefault();
       setStatusCurrentRow("active-red");
@@ -412,7 +426,7 @@ function KjStudyIndex():JSX.Element
     }
 
     // set item as green
-    else if (e.key=="ArrowLeft" || e.key=="Enter" || e.key=="a" || e.key=="A" || e.key==" ")
+    else if (e.key=="ArrowLeft" || e.key=="a" || e.key=="A")
     {
       e.preventDefault();
       setStatusCurrentRow("active-green");
@@ -420,7 +434,10 @@ function KjStudyIndex():JSX.Element
     }
 
     // sentence search for current row
-    else if (e.key=="z" || e.key=="Z" || e.key==",")
+    else if (
+      !e.ctrlKey && (e.key=="c" || e.key=="C")
+      || e.key=="\\"
+    )
     {
       if (!currentRow)
       {
@@ -431,7 +448,7 @@ function KjStudyIndex():JSX.Element
     }
 
     // word search current row
-    else if (e.key=="x" || e.key=="X" || e.key==".")
+    else if (e.key=="x" || e.key=="X" || e.key=="]")
     {
       if (!currentRow)
       {
@@ -442,7 +459,10 @@ function KjStudyIndex():JSX.Element
     }
 
     // sentence pieces search current row
-    else if ((!e.ctrlKey && (e.key=="c" || e.key=="C")) || e.key=="/")
+    else if (
+      e.key=="z" || e.key=="Z"
+      || mainActionKey
+    )
     {
       if (!currentRow)
       {
@@ -453,7 +473,7 @@ function KjStudyIndex():JSX.Element
     }
 
     // copy current row
-    else if (e.key=="v" || e.key=="V" || e.key=="'" || e.key=="\"" || e.key=="0")
+    else if (e.key=="v" || e.key=="V")
     {
       e.preventDefault();
 
