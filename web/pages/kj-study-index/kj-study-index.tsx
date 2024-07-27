@@ -450,7 +450,7 @@ function KjStudyIndex():JSX.Element
     }
 
     // word search current row
-    else if (e.key=="x" || e.key=="X" || e.key=="]")
+    else if (e.key=="x" || e.key=="X" || e.key=="'")
     {
       if (!currentRow)
       {

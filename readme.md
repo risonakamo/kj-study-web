@@ -7,7 +7,7 @@
 - <kbd>enter</kbd>, <kbd>space</kbd>, <kbd>0</kbd>: do row main action (search all or copy row)
 - <kbd>z</kbd>: search all of current row
 - <kbd>v</kbd>: copy current row
-- <kbd>x</kbd>, <kbd>]</kbd>: search word of current row
+- <kbd>x</kbd>, <kbd>'</kbd>: search word of current row
 - <kbd>c</kbd>, <kbd>\\</kbd>: search sentence of current row
 
 ## Session
