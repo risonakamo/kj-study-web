@@ -14,6 +14,7 @@ import {updateSentenceListStatus} from "@/lib/word-sentence";
 import {Button1} from "@/components/button1/button1";
 import {searchForSentenceNewTab, searchForSentenceUrl, searchForWordNewTab,
   searchForWordUrl} from "@/lib/jisho-url";
+import {addUrlSeed} from "@/lib/utils";
 
 import "./kj-study-index.styl";
 
@@ -340,7 +341,7 @@ function KjStudyIndex():JSX.Element
   {
     if (iframeEnabled)
     {
-      setJishoIframeUrl(searchForWordUrl(word));
+      setJishoIframeUrl(addUrlSeed(searchForWordUrl(word)));
     }
 
     else
@@ -355,7 +356,7 @@ function KjStudyIndex():JSX.Element
   {
     if (iframeEnabled)
     {
-      setJishoIframeUrl(searchForSentenceUrl(sentence));
+      setJishoIframeUrl(addUrlSeed(searchForSentenceUrl(sentence)));
     }
 
     else
