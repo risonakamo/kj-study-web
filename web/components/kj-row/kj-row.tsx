@@ -158,9 +158,9 @@ function KjRow_inner(props:KjRowProps,ref:React.Ref<KjRowRef>):JSX.Element
     }
 
     return <>
-      <Button1 icon={<Forward/>} text="Sentence" onClick={h_linkSentenceClick}/>
-      <Button1 icon={<Forward/>} text="Word" onClick={h_linkWordClick}/>
       <Button1 icon={<Forward/>} text="All" onClick={h_linkAllClick}/>
+      <Button1 icon={<Forward/>} text="Word" onClick={h_linkWordClick}/>
+      <Button1 icon={<Forward/>} text="Sentence" onClick={h_linkSentenceClick}/>
     </>;
   }
 

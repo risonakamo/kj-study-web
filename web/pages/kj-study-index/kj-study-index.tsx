@@ -736,8 +736,8 @@ function KjStudyIndex():JSX.Element
             </div>
           </div>
           <div className="row2">
-            <Button1 icon={<Columns2/>} text={iframeText} onClick={h_iframeToggleButtonClick}/>
             <Button1 icon={darkModeIcon} text={darkModeText} onClick={h_darkModeClick}/>
+            <Button1 icon={<Columns2/>} text={iframeText} onClick={h_iframeToggleButtonClick}/>
           </div>
         </div>
 
