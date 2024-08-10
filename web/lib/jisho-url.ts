@@ -1,9 +1,6 @@
 // funcs dealing with jisho url scheme
 
-import {percentTruncate} from "./utils";
-
-/** percent to truncate sentence when searching. adjust if failing alot */
-const SentenceTruncatePercent:number=.5;
+import {jishoTruncate} from "@/lib/sentence-truncate";
 
 /** return url to search for a target word. also works to search for full sentence in
  *  pieces mode */
@@ -16,7 +13,7 @@ export function searchForWordUrl(word:string):string
  *  some percent of the size for consistency */
 export function searchForSentenceUrl(sentence:string):string
 {
-    sentence=percentTruncate(sentence,SentenceTruncatePercent);
+    sentence=jishoTruncate(sentence);
     return `https://jisho.org/search/${sentence}%20%23sentence`;
 }
 
