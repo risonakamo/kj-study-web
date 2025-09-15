@@ -28,3 +28,16 @@ export function searchForSentenceNewTab(sentence:string):void
 {
     window.open(searchForSentenceUrl(sentence),"_blank");
 }
+
+/** the 1st search for word actually does "all" search. this one does the actually
+ *  single word search */
+export function searchForWordUrlActual(word:string):string
+{
+    return `https://jisho.org/word/${word}`;
+}
+
+/** open a new tab and seawrch for target word (single word search) */
+export function searchForWordNewTabActual(word:string):void
+{
+    window.open(searchForWordUrlActual(word),"_blank");
+}

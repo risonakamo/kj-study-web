@@ -13,7 +13,8 @@ import {apiSetSentenceState, apiShuffleSentences, getKjFiles, getKjSession,
 import {updateSentenceListStatus} from "@/lib/word-sentence";
 import {Button1} from "@/components/button1/button1";
 import {searchForSentenceNewTab, searchForSentenceUrl, searchForWordNewTab,
-  searchForWordUrl} from "@/lib/jisho-url";
+  searchForWordUrl,
+  searchForWordUrlActual} from "@/lib/jisho-url";
 import {addUrlSeed} from "@/lib/utils";
 
 import "./kj-study-index.styl";
@@ -335,7 +336,7 @@ function KjStudyIndex():JSX.Element
     setSelectedRow(newRow);
   }
 
-  /** do word or all-sentence search. either opens in new tab, or opens in iframe,
+  /** all-sentence search. either opens in new tab, or opens in iframe,
    *  based on current iframe mode */
   function doSearchWord(word:string):void
   {
@@ -362,6 +363,20 @@ function KjStudyIndex():JSX.Element
     else
     {
       searchForSentenceNewTab(sentence);
+    }
+  }
+
+  /** single word search, in iframe or new tab */
+  function doSearchWordActual(word:string):void
+  {
+    if (iframeEnabled)
+    {
+      setJishoIframeUrl(addUrlSeed(searchForWordUrlActual(word)));
+    }
+
+    else
+    {
+      searchForWordNewTab(word);
     }
   }
 
@@ -458,7 +473,7 @@ function KjStudyIndex():JSX.Element
         return;
       }
 
-      doSearchWord(currentRow.word);
+      doSearchWordActual(currentRow.word);
     }
 
     // sentence pieces search current row
@@ -564,7 +579,7 @@ function KjStudyIndex():JSX.Element
    *  setting the iframe's url */
   function h_rowWordSearch(word:string):void
   {
-    doSearchWord(word);
+    doSearchWordActual(word);
   }
 
   /** a kj row requested sentence search. trigger the search by
