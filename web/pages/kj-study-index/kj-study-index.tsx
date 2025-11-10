@@ -719,35 +719,40 @@ function KjStudyIndex():JSX.Element
   // --- render
   return <>
     <div className={containerCx} ref={rowsContainerRef} onMouseEnter={h_mouseEnterRowsContain}>
-      <div className="inner-contain">
-        <div className="top">
-          <div className="row1">
-            <div className="left">
-              <Button1 icon={<RefreshCcw/>} text="Reset Session" onClick={h_shuffleSessionButton}/>
-              <Button1 icon={<ShuffleIcon/>} text="Shuffle" onClick={h_shuffleSentencesClick}/>
+      <div className="inner-contain2">
+        <div className="inner-contain">
+          <div className="top">
+            <div className="row1">
+              <div className="left">
+                <Button1 icon={<RefreshCcw/>} text="Reset Session" onClick={h_shuffleSessionButton}/>
+                <Button1 icon={<ShuffleIcon/>} text="Shuffle" onClick={h_shuffleSentencesClick}/>
+              </div>
+              <div className="right">
+                <select className="data-selector" onChange={h_datafileSelectorChange}
+                  value={selectedDatafile}
+                >
+                  {r_datafilesList()}
+                </select>
+                <Button1 icon={<ArrowRight/>} text="Load Data" onClick={h_loadDatafileClick}/>
+              </div>
             </div>
-            <div className="right">
-              <select className="data-selector" onChange={h_datafileSelectorChange}
-                value={selectedDatafile}
-              >
-                {r_datafilesList()}
-              </select>
-              <Button1 icon={<ArrowRight/>} text="Load Data" onClick={h_loadDatafileClick}/>
+            <div className="row2">
+              <Button1 icon={darkModeIcon} text={darkModeText} onClick={h_darkModeClick}/>
+              <Button1 icon={<Columns2/>} text={iframeText} onClick={h_iframeToggleButtonClick}/>
             </div>
           </div>
-          <div className="row2">
-            <Button1 icon={darkModeIcon} text={darkModeText} onClick={h_darkModeClick}/>
-            <Button1 icon={<Columns2/>} text={iframeText} onClick={h_iframeToggleButtonClick}/>
+
+          <div className="kj-rows">
+            {r_kjRows()}
+          </div>
+
+          <div className="bottom">
+            <Button1 icon={<ShuffleIcon/>} text="Shuffle" onClick={h_shuffleSentencesClick}/>
           </div>
         </div>
+      </div>
 
-        <div className="kj-rows">
-          {r_kjRows()}
-        </div>
-
-        <div className="bottom">
-          <Button1 icon={<ShuffleIcon/>} text="Shuffle" onClick={h_shuffleSentencesClick}/>
-        </div>
+      <div className="progress-bar">
       </div>
     </div>
 

@@ -50,9 +50,16 @@ main
     .contain
         width: 55%
         min-width: 500px
-        overflow: auto
+        overflow: hidden
         flex: 1
-        padding: 15px 0 13px
+        position: relative
+
+        .inner-contain2
+            width 100%
+            height: 100%
+            overflow: auto
+            padding: 15px 0 13px
+            box-sizing: border-box
 
         .top
             margin-bottom: 10px
@@ -82,6 +89,13 @@ main
             display: flex
             justify-content: center
             margin-top: 10px
+
+        .progress-bar
+            width: 100%
+            height: 4px
+            background: white
+            position: absolute
+            bottom: 0
 
         &.expanded
             padding: 0
