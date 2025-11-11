@@ -8,7 +8,7 @@
     .segment
         display: inline-block
         height: 100%
-        padding: 0 2px
+        padding: 4px 2px 0
         box-sizing: border-box
 
         .inner
@@ -16,11 +16,11 @@
             height: 100%
             background: var(--lines-colour)
 
-            // &.active
-            //     outline: 3px solid var(--selected-border)
-
             &.good
                 background: var(--button2-green-border)
 
             &.bad
                 background: var(--button2-red-hover-background)
+
+        &.active
+            padding-top: 0

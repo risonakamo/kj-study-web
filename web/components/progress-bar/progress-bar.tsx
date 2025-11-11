@@ -23,7 +23,11 @@ export function ProgressBar(props:ProgressBarProps):JSX.Element
         "active":i==props.selectedRow,
       });
 
-      return <div className="segment" key={i}
+      const segmentCx:string=clsx("segment",{
+        "active":i==props.selectedRow,
+      });
+
+      return <div className={segmentCx} key={i}
         style={{ width: widthStr }}
       >
         <div className={innerCx}></div>
