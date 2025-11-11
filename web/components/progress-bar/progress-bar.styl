@@ -1,0 +1,23 @@
+@import url("@/css/fonts.styl")
+
+.progress-bar
+    width: 100%
+    height: 100%
+    font-size: 0
+
+    .segment
+        display: inline-block
+        height: 100%
+        padding: 0 2px
+        box-sizing: border-box
+
+        .inner
+            width 100%
+            height: 100%
+            background: var(--lines-colour)
+
+            &.good
+                background: var(--button2-green-border)
+
+            &.bad
+                background: var(--button2-red-hover-background)

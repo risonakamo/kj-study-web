@@ -15,6 +15,7 @@ import {Button1} from "@/components/button1/button1";
 import {searchForSentenceNewTab, searchForSentenceUrl, searchForWordNewTab,
   searchForWordUrl} from "@/lib/jisho-url";
 import {addUrlSeed} from "@/lib/utils";
+import {ProgressBar} from "@/components/progress-bar/progress-bar";
 
 import "./kj-study-index.styl";
 
@@ -752,7 +753,8 @@ function KjStudyIndex():JSX.Element
         </div>
       </div>
 
-      <div className="progress-bar">
+      <div className="progress-bar-contain">
+        <ProgressBar/>
       </div>
     </div>
 
