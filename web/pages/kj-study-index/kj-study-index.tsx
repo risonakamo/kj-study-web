@@ -754,7 +754,7 @@ function KjStudyIndex():JSX.Element
       </div>
 
       <div className="progress-bar-contain">
-        <ProgressBar/>
+        <ProgressBar session={session} selectedRow={selectedRow}/>
       </div>
     </div>
 
