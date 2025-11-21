@@ -719,8 +719,8 @@ function KjStudyIndex():JSX.Element
 
   // --- render
   return <>
-    <div className={containerCx} ref={rowsContainerRef} onMouseEnter={h_mouseEnterRowsContain}>
-      <div className="inner-contain2">
+    <div className={containerCx} onMouseEnter={h_mouseEnterRowsContain}>
+      <div className="inner-contain2" ref={rowsContainerRef}>
         <div className="inner-contain">
           <div className="top">
             <div className="row1">
